@@ -1,4 +1,0 @@
-repository "Tournament Dariel@ppj789@cloud"
-  path "/"
-    br "/main"
-    co "/main"
