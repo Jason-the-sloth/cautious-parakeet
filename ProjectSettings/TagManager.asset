@@ -3,12 +3,16 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - wall
+  - Logic
+  - Grid
+  - Bot
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - graphical
   - Water
   - UI
   - 
