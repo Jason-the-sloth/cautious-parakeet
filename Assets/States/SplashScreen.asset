@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4509af211ea394c5baf8579db9b69331, type: 3}
+  m_Name: SplashScreen
+  m_EditorClassIdentifier: 
+  stateEnum: 0
+  text: "WELCOME!\n\tPress 'S' to start game!\n\tPress 'Q' to quit!"
+  optionList:
+  - {fileID: 11400000, guid: c4b578d561be44de7acc65d718afb29f, type: 2}
+  canExit: 1
