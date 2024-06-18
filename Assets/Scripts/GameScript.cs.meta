@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: c30bb4a108e1e45ffa80183be3294722
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - menuTextComponent: {fileID: 686638082797822750, guid: 01878597c52964c9587a8a845c564eb8, type: 3}
+  - menuState: {fileID: 11400000, guid: 5a10acab9dfe24b0f892a3b3f94cdf1a, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
