@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4860072368104601515}
   - component: {fileID: 4297331658014165842}
   - component: {fileID: 4416780018425404331}
-  - component: {fileID: 3695731352495935029}
   - component: {fileID: 8291647896513086302}
   m_Layer: 0
   m_Name: Bullet
@@ -31,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 30, y: 30, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -149,8 +148,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 0.25
-  m_LinearDrag: 0
+  m_Mass: 1
+  m_LinearDrag: 0.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 6200000, guid: 9672610d4fe12cf4fb3f9b3f64ba1d1f, type: 2}
@@ -164,17 +163,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!247 &3695731352495935029
-ConstantForce2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1819433039985643459}
-  m_Enabled: 1
-  m_Force: {x: 0, y: 0}
-  m_RelativeForce: {x: 0, y: 0}
-  m_Torque: 0
 --- !u!114 &8291647896513086302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -187,5 +175,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d934da3b1de5be44aab87d070ef1ad99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathCount: 1000
+  deathCount: 6
   original: 1
+  force: 300
