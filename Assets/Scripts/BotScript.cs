@@ -59,6 +59,10 @@ public class BotScript : MonoBehaviour
             CreateBullet();
 
         }
+		else if(shoot)
+		{
+			Debug.Log("Shooting is on cooldown");
+		}
         
     }
 
