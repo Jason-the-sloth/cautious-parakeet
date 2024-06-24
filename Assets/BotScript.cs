@@ -3,34 +3,42 @@ using UnityEngine;
 
 public class BotScript : MonoBehaviour
 {
+	//Game Variables
     public float moveSpeed = 10.0f;
     public float rotationSpeed = 0.5f;
-
     public float shootingInterval;
-
     public float bulletForce;
+	public float viewRadius;
+	public float viewAngle;
 
+	//Game Objects
     public GameObject bullet;
-    public GameObject bullets;
+    private GameObject bullets;
+	public BotScriptInterface botScript = new HumanPlayer();
 
 
-
+	//Internal Variables
     private float lastFired;
 
 
+	public void SetBotScript(BotScriptInterface botScript)
+	{
+		this.botScript = botScript;
+	}
+
 
     // Start is called before the first frame update
-
     private void Start()
     {
-        
+		botScript ??= new HumanPlayer();
+		bullets = GameObject.Find("Bullets");
     }
 
     // Update is called once per frame
     private void Update()
     {
 
-		BotCommands botCommands = JasonBotScript.getCommands(null);
+		BotCommands botCommands = botScript.GetCommands(null);
 
 
 		Move(botCommands.GetMove());

@@ -1,92 +1,63 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using UnityEngine.UIElements;
 
-public class human : MonoBehaviour
+
+public class HumanPlayer : BotScriptInterface
 {
-    public float moveSpeed = 10.0f;
-    public float rotationSpeed = 0.5f;
-
-    public float shootingInterval;
-
-    public float bulletForce;
-
-    public GameObject bullet;
-    public GameObject bullets;
-
-    private float lastFired;
-
-    // Start is called before the first frame update
-    void Start()
+    public BotCommands GetCommands(List<GameObject> objects)
     {
-        bullets = GameObject.Find("Bullets");
-        lastFired = -1;
+        BotCommands botCommands = new BotCommands(Move(), Rotate(), Shoot());
+
+        return botCommands;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        Move();
-
-        Shoot();
-    }
-
-    void Move()
+    Vector2 Move()
     {
 // Initialize movement direction
-        Vector3 moveDirection = Vector3.zero;
+        Vector2 moveDirection = Vector2.zero;
 
         // Check for each arrow key and adjust the move direction accordingly
         if (Input.GetKey(KeyCode.W))
         {
-            moveDirection += Vector3.up;
+            moveDirection += Vector2.up;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            moveDirection += Vector3.left;
+            moveDirection += Vector2.left;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            moveDirection += Vector3.down;
+            moveDirection += Vector2.down;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            moveDirection += Vector3.right;
+            moveDirection += Vector2.right;
         }
 
-        transform.GetComponent<Rigidbody2D>().AddRelativeForce(moveDirection);
 
+        return moveDirection;
+        
+    }
+
+    float Rotate()
+    {
+        float rotate = 0f;
 
         if (Input.GetKey(KeyCode.Q))
         {
-            transform.rotation *= Quaternion.Euler(0, 0, rotationSpeed);
+            rotate += 1;
         }
         if (Input.GetKey(KeyCode.E))
         {
-            transform.rotation *= Quaternion.Euler(0, 0, -rotationSpeed);
+            rotate -= 1;
         }
+
+        return rotate;
     }
 
-    void Shoot()
+    bool Shoot()
     {
-        if(lastFired >= 0)
-            lastFired -= Time.deltaTime;
-    
-        if (Input.GetKey(KeyCode.Space) && (lastFired < 0f))
-        {
-            lastFired = shootingInterval;
-
-
-            GameObject duplicateBullet = Instantiate(bullet, transform.position+(transform.up * 0.5f), transform.rotation * Quaternion.Euler(0, 0, 90));
-            duplicateBullet.transform.SetParent(bullets.transform, true);
-            Physics2D.IgnoreCollision(duplicateBullet.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-            duplicateBullet.transform.GetComponent<Rigidbody2D>().velocity = transform.GetComponent<Rigidbody2D>().velocity;
-            duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * bulletForce);
-            duplicateBullet.GetComponent<BulletScript>().original = false;
-            // duplicateBullet.transform.
-        }
+        return Input.GetKey(KeyCode.Space);
 
     }
 }
