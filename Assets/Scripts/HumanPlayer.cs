@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HumanPlayer : BotScriptInterface
 {
-    public BotCommands GetCommands(List<GameObject> objects)
+    public BotCommands GetCommands(List<RaycastHit2D> objects)
     {
         BotCommands botCommands = new BotCommands(Move(), Rotate(), Shoot());
 

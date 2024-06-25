@@ -13,9 +13,9 @@ GameObject:
   - component: {fileID: 4297331658014165842}
   - component: {fileID: 4416780018425404331}
   - component: {fileID: 8291647896513086302}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Bullet
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -177,4 +177,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deathCount: 6
   original: 1
-  force: 300

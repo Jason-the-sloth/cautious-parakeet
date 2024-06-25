@@ -1,4 +1,7 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 public class BotScript : MonoBehaviour
@@ -32,19 +35,74 @@ public class BotScript : MonoBehaviour
     {
 		botScript ??= new HumanPlayer();
 		bullets = GameObject.Find("Bullets");
+
+		CreateArcAndCircle();
     }
 
     // Update is called once per frame
     private void Update()
     {
+		
 
-		BotCommands botCommands = botScript.GetCommands(null);
+		BotCommands botCommands = botScript.GetCommands(CheckConeCollision());
 
 
 		Move(botCommands.GetMove());
         Rotate(botCommands.GetRotate());
         Shoot(botCommands.GetShoot());
     }
+
+	private void CreateArcAndCircle()
+	{		
+		//drawing the arc
+		Transform circle = transform.Find("CollisionCircle");
+		Transform arc1 = transform.Find("CollisionLine1");
+		Transform arc2 = transform.Find("CollisionLine2");
+
+		circle.localScale = new Vector3(viewRadius,viewRadius);
+
+		arc1.localScale = new Vector3(0.01f,viewRadius/2);
+		arc1.Rotate(new Vector3(0,0, viewAngle/2));
+		arc1.position += arc1.up * (viewRadius/4);
+		
+		arc2.localScale = new Vector3(0.01f,viewRadius/2);
+		arc2.Rotate(new Vector3(0,0, -viewAngle/2));
+		arc2.position += arc2.up * (viewRadius/4);
+		
+	}
+
+	private List<RaycastHit2D> CheckConeCollision ()
+	{
+		RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(transform.position + (transform.up*0.2f), viewRadius, transform.up);
+		List<RaycastHit2D> raycastHitsSeen = new();
+		if(raycastHits.Length > 0)
+		{
+			foreach(RaycastHit2D raycastHit in raycastHits)
+			{
+				//Lets pretend you can hear bullets
+				if(raycastHit.collider.CompareTag("bullet"))
+				{
+					raycastHitsSeen.Add(raycastHit);
+				}
+				else
+				{
+					RaycastHit2D lineHit = Physics2D.Raycast(transform.position+transform.up, raycastHit.transform.position);
+					if(lineHit && lineHit.collider.gameObject == raycastHit.collider.gameObject)
+					{
+						raycastHitsSeen.Add(raycastHit);
+					}
+				}
+			}
+		}
+		StringBuilder stringBuilder = new();
+		foreach(RaycastHit2D hit in raycastHitsSeen)
+		{
+			stringBuilder.Append(hit.transform.gameObject.name + ", ");
+		}
+		Debug.Log(stringBuilder.ToString());
+		return raycastHitsSeen;
+	}
+
 
     private void Shoot(bool shoot)
     {
@@ -74,6 +132,7 @@ public class BotScript : MonoBehaviour
         duplicateBullet.transform.GetComponent<Rigidbody2D>().velocity = transform.GetComponent<Rigidbody2D>().velocity;
         duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * bulletForce);
         duplicateBullet.GetComponent<BulletScript>().original = false;
+		duplicateBullet.gameObject.name = "Bullet"+Time.time;
     }
 
     private void Rotate(float z)

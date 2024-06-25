@@ -6,6 +6,8 @@ TagManager:
   tags:
   - obstacle
   - border
+  - player
+  - bullet
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Bullet
+  - Obstacle
   - 
   - 
   - 
