@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class HumanPlayer : BotScriptInterface
+public class HumanPlayer : IBotScript
 {
     public BotCommands GetCommands(List<Collider2D> objects)
     {
-        BotCommands botCommands = new BotCommands(Move(), Rotate(), Shoot());
+        BotCommands botCommands = new(Move(), Rotate(), Shoot());
 
         return botCommands;
     }
