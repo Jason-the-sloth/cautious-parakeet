@@ -1,8 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
+using static UnityEngine.GraphicsBuffer;
 
 public class BotScript : MonoBehaviour
 {
@@ -36,7 +41,7 @@ public class BotScript : MonoBehaviour
 		botScript ??= new HumanPlayer();
 		bullets = GameObject.Find("Bullets");
 
-		CreateArcAndCircle();
+        CreateArcAndCircle();
     }
 
     // Update is called once per frame
@@ -52,56 +57,65 @@ public class BotScript : MonoBehaviour
         Shoot(botCommands.GetShoot());
     }
 
-	private void CreateArcAndCircle()
-	{		
-		//drawing the arc
-		Transform circle = transform.Find("CollisionCircle");
-		Transform arc1 = transform.Find("CollisionLine1");
-		Transform arc2 = transform.Find("CollisionLine2");
+    private void CreateArcAndCircle()
+    {
 
-		circle.localScale = new Vector3(viewRadius,viewRadius);
 
-		arc1.localScale = new Vector3(0.01f,viewRadius/2);
-		arc1.Rotate(new Vector3(0,0, viewAngle/2));
-		arc1.position += arc1.up * (viewRadius/4);
-		
-		arc2.localScale = new Vector3(0.01f,viewRadius/2);
-		arc2.Rotate(new Vector3(0,0, -viewAngle/2));
-		arc2.position += arc2.up * (viewRadius/4);
-		
-	}
 
-	private List<RaycastHit2D> CheckConeCollision ()
+        //drawing the arc
+        Transform circle = transform.Find("CollisionCircle");
+        Transform arc1 = transform.Find("CollisionLine1");
+        Transform arc2 = transform.Find("CollisionLine2");
+
+        circle.localScale = new Vector3(viewRadius*2, viewRadius*2);
+
+        arc1.localScale = new Vector3(0.01f, viewRadius );
+        arc1.Rotate(new Vector3(0, 0, viewAngle/2 ));
+        arc1.position += arc1.up * (viewRadius / 2);
+
+        arc2.localScale = new Vector3(0.01f, viewRadius );
+        arc2.Rotate(new Vector3(0, 0, -viewAngle/2));
+        arc2.position += arc2.up * (viewRadius / 2);
+
+    }
+
+    private List<Collider2D> CheckConeCollision ()
 	{
-		RaycastHit2D[] raycastHits = Physics2D.CircleCastAll(transform.position + (transform.up*0.2f), viewRadius, transform.up);
-		List<RaycastHit2D> raycastHitsSeen = new();
-		if(raycastHits.Length > 0)
-		{
-			foreach(RaycastHit2D raycastHit in raycastHits)
-			{
-				//Lets pretend you can hear bullets
-				if(raycastHit.collider.CompareTag("bullet"))
-				{
-					raycastHitsSeen.Add(raycastHit);
-				}
-				else
-				{
-					RaycastHit2D lineHit = Physics2D.Raycast(transform.position+transform.up, raycastHit.transform.position);
-					if(lineHit && lineHit.collider.gameObject == raycastHit.collider.gameObject)
-					{
-						raycastHitsSeen.Add(raycastHit);
-					}
-				}
-			}
-		}
-		StringBuilder stringBuilder = new();
-		foreach(RaycastHit2D hit in raycastHitsSeen)
-		{
-			stringBuilder.Append(hit.transform.gameObject.name + ", ");
-		}
-		Debug.Log(stringBuilder.ToString());
-		return raycastHitsSeen;
-	}
+        Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, viewRadius);
+        List<Collider2D> raycastHitsSeen = new();
+        if (raycastHits.Length > 0)
+        {
+            foreach (Collider2D raycastHit in raycastHits)
+            {
+                //Lets pretend you can hear bullets
+                if (raycastHit.CompareTag("bullet"))
+                {
+                    raycastHitsSeen.Add(raycastHit);
+                }
+                else
+                {
+                    
+
+                    Vector3 targetDir = raycastHit.transform.position - transform.position;
+
+                    float angle = Vector3.Angle(targetDir, transform.up);
+
+                    if (angle <= viewAngle / 2.0f) // Object is within half the cone angle
+                    {
+                        raycastHitsSeen.Add(raycastHit);
+                    }
+                }
+            }
+        }
+        StringBuilder stringBuilder = new();
+        foreach (Collider2D hit in raycastHitsSeen)
+        {
+            stringBuilder.Append(hit.transform.gameObject.name + ", ");
+        }
+        Debug.Log(stringBuilder.ToString());
+        return raycastHitsSeen;
+       
+    }
 
 
     private void Shoot(bool shoot)
@@ -184,4 +198,6 @@ public class BotScript : MonoBehaviour
 	{
 		return value<=1 && value >= -1;
 	}
+
+   
 }

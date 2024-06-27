@@ -179,16 +179,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365801135860132522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ae4f80b2df1f6478c5074f2c47d2f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 13e723a1525a36a478b339f65e78f901, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotationSpeed: 0.5
   shootingInterval: 1
-  bulletForce: 500
-  viewRadius: 6
-  viewAngle: 70
-  bullet: {fileID: 1819433039985643459, guid: 591c8498f0ed71241809b23de8bf4d80, type: 3}
+  bulletForce: 300
+  viewRadius: 5
+  viewAngle: 100
+  bullet: {fileID: 1819433039985643459, guid: 898773ac5a051684d8ec92d804b02883, type: 3}
 --- !u!1 &2903982994774708429
 GameObject:
   m_ObjectHideFlags: 0
@@ -439,7 +439,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.2905661, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -527,7 +527,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
-  m_Color: {r: 0.2905661, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

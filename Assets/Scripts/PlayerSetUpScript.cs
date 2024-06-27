@@ -13,7 +13,7 @@ public class PlayerSetUpScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		//CreatePlayer(p1, "Player 1", new JasonBotScript());
+		CreatePlayer(p1, "Player 1", new JasonBotScript());
 		CreatePlayer(p2, "Player 2", new HumanPlayer());
 	}
 
