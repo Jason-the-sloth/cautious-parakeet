@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JasonBotScript : BotScriptInterface
+public class JasonBotScript : IBotScript
 {
 	public JasonBotScript (){}
 

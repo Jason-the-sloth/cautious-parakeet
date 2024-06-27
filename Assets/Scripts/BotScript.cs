@@ -17,14 +17,14 @@ public class BotScript : MonoBehaviour
 	//Game Objects
     public GameObject bullet;
     private GameObject bullets;
-	public BotScriptInterface botScript = new HumanPlayer();
+	public IBotScript botScript = new HumanPlayer();
 
 
 	//Internal Variables
     private float lastFired;
 
 
-	public void SetBotScript(BotScriptInterface botScript)
+	public void SetBotScript(IBotScript botScript)
 	{
 		this.botScript = botScript;
 	}

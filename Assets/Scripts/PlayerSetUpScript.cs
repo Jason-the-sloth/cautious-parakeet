@@ -17,7 +17,7 @@ public class PlayerSetUpScript : MonoBehaviour
 		CreatePlayer(p2, "Player 2", new HumanPlayer());
 	}
 
-	void CreatePlayer(Vector2 vec, String name, BotScriptInterface botScript)
+	void CreatePlayer(Vector2 vec, String name, IBotScript botScript)
 	{
 		GameObject player = Instantiate(playerTriangle, vec, Quaternion.identity);
 		player.transform.Rotate(new Vector3(0,0,180-Vector2.SignedAngle(vec, Vector2.up)));
