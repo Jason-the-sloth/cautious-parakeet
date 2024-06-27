@@ -292,7 +292,7 @@ GameObject:
   - component: {fileID: 1399560095}
   - component: {fileID: 1399560096}
   - component: {fileID: 1399560097}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BorderE
   m_TagString: border
   m_Icon: {fileID: 0}
@@ -561,7 +561,7 @@ GameObject:
   - component: {fileID: 1737791255}
   - component: {fileID: 1737791256}
   - component: {fileID: 1737791257}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Circle
   m_TagString: obstacle
   m_Icon: {fileID: 0}
