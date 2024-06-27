@@ -82,20 +82,19 @@ public class BotScript : MonoBehaviour
     private List<Collider2D> CheckConeCollision ()
 	{
         Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, viewRadius);
+
         List<Collider2D> raycastHitsSeen = new();
         if (raycastHits.Length > 0)
         {
             foreach (Collider2D raycastHit in raycastHits)
             {
                 //Lets pretend you can hear bullets
-                if (raycastHit.CompareTag("bullet"))
+                if (raycastHit.CompareTag("bullet") || raycastHit.CompareTag("border"))
                 {
                     raycastHitsSeen.Add(raycastHit);
                 }
                 else
                 {
-                    
-
                     Vector3 targetDir = raycastHit.transform.position - transform.position;
 
                     float angle = Vector3.Angle(targetDir, transform.up);
@@ -107,12 +106,7 @@ public class BotScript : MonoBehaviour
                 }
             }
         }
-        StringBuilder stringBuilder = new();
-        foreach (Collider2D hit in raycastHitsSeen)
-        {
-            stringBuilder.Append(hit.transform.gameObject.name + ", ");
-        }
-        Debug.Log(stringBuilder.ToString());
+       
         return raycastHitsSeen;
        
     }
