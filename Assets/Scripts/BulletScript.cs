@@ -22,7 +22,7 @@ public class BulletScript : MonoBehaviour
         
 
         deathCount-=Time.deltaTime;
-        if(deathCount < 1 || GetComponent<Rigidbody2D>().velocity == Vector2.zero)
+        if(deathCount < 1 || GetComponent<Rigidbody2D>().velocity.magnitude < 1)
         {
             Destroy(transform.gameObject);
         }
