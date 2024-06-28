@@ -11,6 +11,13 @@ public class BotCommands
 
 	private readonly bool shoot;
 
+	public BotCommands()
+	{
+		move = Vector2.zero;
+		rotate = 0f;
+		shoot = false;
+	}
+
 	public BotCommands(Vector2 move, float rotate, bool shoot)
 	{
 		this.move = move;
