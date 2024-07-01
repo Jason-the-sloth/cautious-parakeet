@@ -4,10 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - wall
-  - Logic
-  - Grid
-  - Bot
+  - obstacle
+  - border
+  - player
+  - bullet
   layers:
   - Default
   - TransparentFX
@@ -15,9 +15,9 @@ TagManager:
   - graphical
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Player
+  - Bullet
+  - Obstacle
   - 
   - 
   - 
