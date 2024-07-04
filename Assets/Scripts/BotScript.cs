@@ -139,7 +139,6 @@ public class BotScript : MonoBehaviour
         Physics2D.IgnoreCollision(duplicateBullet.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         duplicateBullet.transform.GetComponent<Rigidbody2D>().velocity = transform.GetComponent<Rigidbody2D>().velocity;
         duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * bulletForce);
-        duplicateBullet.GetComponent<BulletScript>().original = false;
 		duplicateBullet.gameObject.name = "Bullet"+Time.time;
     }
 
