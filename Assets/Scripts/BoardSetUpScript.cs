@@ -31,7 +31,7 @@ public class BoardSetUpScript : MonoBehaviour
         duplicateBorder.name = "BoardS";
         duplicateBorder.transform.SetParent(borders.transform, true);
 
-        for (int  i = 0; i < 10; i++)
+        for (int i = 0; i < 10; i++)
         {
             float x = UnityEngine.Random.Range(-rectangleWidth / 2, rectangleWidth / 2);
             float y = UnityEngine.Random.Range(-rectangleHeight / 2, rectangleHeight / 2);
@@ -39,7 +39,7 @@ public class BoardSetUpScript : MonoBehaviour
             GameObject duplicateCircle = Instantiate(circle, randomPosition, Quaternion.identity);
             duplicateCircle.name = "DupCircle" + i;
             duplicateCircle.transform.SetParent(obstacles.transform, true);
-            
+
         }
     }
 
