@@ -195,12 +195,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 433397893}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f31f540c62649245b9dd1b55717e2b3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2890e57a54783d34da80e5ec1ae79a6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTriangle: {fileID: 1365801135860132522, guid: 5d7c98cdca81a8848ac6b0d1bebc8916, type: 3}
-  p1: {x: -5, y: 5}
-  p2: {x: 5, y: -5}
+  playerTriangle: {fileID: 1365801135860132522, guid: acda020685ec3a146b25f99109618bdf, type: 3}
+  p1: {x: 2, y: 2}
+  p2: {x: 0, y: 0}
 --- !u!1 &1073633554
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,8 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 522cb3d032d87a047ab24467a18cce18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rectangleWidth: 10
-  rectangleHeight: 10
 --- !u!4 &1073633556
 Transform:
   m_ObjectHideFlags: 0
@@ -420,6 +418,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1557513332}
+  - component: {fileID: 1557513333}
   m_Layer: 0
   m_Name: Borders
   m_TagString: Untagged
@@ -443,6 +442,20 @@ Transform:
   - {fileID: 1399560095}
   m_Father: {fileID: 1073633556}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1557513333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1557513331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 583fca572a3a72044a1b26da122288e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rectangleWidth: 10
+  rectangleHeight: 10
 --- !u!1 &1714492540
 GameObject:
   m_ObjectHideFlags: 0
@@ -548,7 +561,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9e6327c22310b3499aca086a29d7c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
 --- !u!1 &1737791253
 GameObject:
   m_ObjectHideFlags: 0

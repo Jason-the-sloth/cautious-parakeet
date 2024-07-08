@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 106167359745377753}
   - component: {fileID: 1906299844391691393}
   - component: {fileID: 6476739457030490440}
-  - component: {fileID: 6437505756068525461}
+  - component: {fileID: -5957727877521736505}
   m_Layer: 6
   m_Name: Player
   m_TagString: player
@@ -170,7 +170,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.28866667}
       - {x: 0.5, y: -0.28866667}
   m_UseDelaunayMesh: 0
---- !u!114 &6437505756068525461
+--- !u!114 &-5957727877521736505
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -179,16 +179,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365801135860132522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d9ae4f80b2df1f6478c5074f2c47d2f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 07ebf9630d48369468c80cdac1441043, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotationSpeed: 0.5
   shootingInterval: 1
-  bulletForce: 300
-  viewRadius: 5
-  viewAngle: 80
-  bullet: {fileID: 1819433039985643459, guid: 591c8498f0ed71241809b23de8bf4d80, type: 3}
+  bulletForce: 200
+  viewRadius: 3
+  viewAngle: 100
+  bullet: {fileID: 1819433039985643459, guid: a8786e3b7111c1841bbd9a180067ab6d, type: 3}
 --- !u!1 &2903982994774708429
 GameObject:
   m_ObjectHideFlags: 0

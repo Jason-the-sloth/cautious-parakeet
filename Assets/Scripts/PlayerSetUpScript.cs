@@ -13,9 +13,10 @@ public class PlayerSetUpScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		CreatePlayer(p1, "Player 1", new BasicBotScript());
+		CreatePlayer(p1, "Player 1", new RoseBotScript());
 		CreatePlayer(p2, "Player 2", new HumanPlayer());
-	}
+       // CreatePlayer(p2, "Player 2", new BasicBotScript());
+    }
 
 	void CreatePlayer(Vector2 vec, String name, IBotScript botScript)
 	{
