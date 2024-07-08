@@ -7,23 +7,22 @@ public class BulletScript : MonoBehaviour
 {
 
     public float deathCount = 1000;
-    public Boolean original = true;
 
     // Start is called before the first frame update
     void Start()
     {
-        if(original)
-            return;
+
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(original)
-            return;
+        Vector2 velocity = GetComponent<Rigidbody2D>().velocity;
+        
+
         deathCount-=Time.deltaTime;
-        if(deathCount < 1)
+        if(deathCount < 1 || GetComponent<Rigidbody2D>().velocity.magnitude < 1)
         {
             Destroy(transform.gameObject);
         }
