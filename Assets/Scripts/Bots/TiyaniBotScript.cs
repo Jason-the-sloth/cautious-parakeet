@@ -30,17 +30,17 @@ public class TiyaniBotScript : IBotScript
     float Rotation;
     bool Shoot;
 
-    List<Collider2D> Collider2Ds = new List<Collider2D>();
+    //List<Collider2D> Collider2Ds = new List<Collider2D>();
     Collider2D Bot = null;
     public TiyaniBotScript() { }
 
     public BotCommands GetCommands(List<Collider2D> gameObjects)
     {
         ResetBotCommands();
-        Collider2Ds = gameObjects;
+        //Collider2Ds = gameObjects;
         Bot = gameObjects.Where(c => c.name == nameof(TiyaniBotScript)).FirstOrDefault();
 
-        OnObjects();
+        OnObjects(gameObjects);
         BotCommands botCommands = new(Movement, Rotation, Shoot);
 
         return botCommands;
@@ -48,7 +48,7 @@ public class TiyaniBotScript : IBotScript
 
     void ResetBotCommands()
     {
-        Collider2Ds.Clear();
+        //Collider2Ds.Clear();
         Shoot = false;
         Rotation = 0f;
         Movement = Vector2.zero;
@@ -92,7 +92,7 @@ public class TiyaniBotScript : IBotScript
 
     }
 
-    public void OnObjects()
+    public void OnObjects(List<Collider2D> Collider2Ds)
     {
         var bullets = Collider2Ds.Where(c => c.CompareTag("bullet")).ToList();
         var borders = Collider2Ds.Where(c => c.CompareTag("border")).ToList();
@@ -187,7 +187,7 @@ public class TiyaniBotScript : IBotScript
         {
             foreach (var enemy in enemies)
             {
-                if (enemy.name != nameof(TiyaniBotScript) )
+                if (enemy.name != nameof(TiyaniBotScript))
                 {
                     //bool onSameLineUp = SameLine(enemy, Vector2.up);
                     //if (onSameLineUp)

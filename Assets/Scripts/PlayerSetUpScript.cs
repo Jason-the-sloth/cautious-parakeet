@@ -13,9 +13,17 @@ public class PlayerSetUpScript : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		CreatePlayer(p1, nameof(TiyaniBotScript), new TiyaniBotScript());
-		CreatePlayer(p2, "Player 2", new HumanPlayer());
-	}
+
+        foreach (var bot in SharedData.Bots)
+        {
+            
+			float randomX = UnityEngine.Random.Range(-1* SharedData.Width, SharedData.Width);
+            float randomY = UnityEngine.Random.Range(-1 * (SharedData.Height-2), (SharedData.Height-2));
+			
+
+            CreatePlayer( new Vector2(randomX,randomY),bot.Key, bot.Value);
+        }
+    }
 
 	void CreatePlayer(Vector2 vec, String name, IBotScript botScript)
 	{
