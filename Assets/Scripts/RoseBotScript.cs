@@ -36,14 +36,159 @@ public class RoseBotScript : IBotScript
         }
         else
         {
-
-           
-            botCommands = SearchForPlayer(playerCollider);
+            // Call SearchForPlayer with the borders list
+         
+            botCommands = SearchForPlayer(RoseBot);
         }
 
         return botCommands;
     }
 
+    // Example method to filter game objects
+    /*public List<Collider2D> GetBorders(List<Collider2D> gameObjects)
+    {
+        List<Collider2D> listOfGameObjects = new List<Collider2D>();
+
+        foreach (Collider2D obj in gameObjects)
+        {
+            // Check for specific game object names
+            if (obj.CompareTag("Border"))
+            {
+                listOfGameObjects.Add(obj);
+            }
+        }
+
+        return listOfGameObjects;
+    }*/
+
+    /*private Vector2 Move(GameObject player)
+    {
+        // Check if the player is null, then search for a player
+        if (player == null)
+        {
+
+            shoot = false; // Stop shooting or other actions
+
+            // Search for a player
+            return SearchForPlayer();
+        }
+        else
+        {
+            shoot = true; // Start shooting 
+            // Calculate direction towards the player
+            Vector2 direction = (player.transform.position - RoseBot.transform.position).normalized;
+
+            // Calculate the movement vector
+            Vector2 movement = direction * speed * Time.deltaTime;
+
+            movement.x = Mathf.Clamp(movement.x, -1f, 1f);
+            movement.y = Mathf.Clamp(movement.y, -1f, 1f);
+
+
+
+            return movement;
+        }
+    }
+
+
+    private bool ValidateMove(Vector2 move)
+    {
+
+        // , check if the move is within expected bounds
+        if (move.x < -1f || move.x > 1f || move.y < -1f || move.y > 1f)
+        {
+            Debug.LogError("Move validation failed: " + move);
+            return false;
+        }
+        return true;
+    }
+
+    private Vector2 SearchForPlayer()
+    {
+        // Move RoseBot in a specific direction to search for player
+        Vector2 movement = searchDirection * searchSpeed * Time.deltaTime;
+
+        // Move RoseBot
+        RoseBot.transform.position += (Vector3)movement;
+
+        // Change search direction periodically (e.g., every second)
+        if (Time.frameCount % 60 == 0) // Change direction every second (assuming 60 FPS)
+        {
+            searchDirection = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
+        }
+
+        return movement;
+    }
+
+    private float Rotate(List<Collider2D> gameObjects)
+    {
+        GameObject borderS = null;
+        GameObject borderE = null;
+        GameObject borderW = null;
+        GameObject borderN = null;
+        float rotate = 0f;
+
+        foreach (Collider2D obj in gameObjects)
+        {
+            Debug.Log("Visible Border GameObjects ****: " + obj.gameObject.name);
+
+            if (obj.gameObject.name == "BorderS")
+            {
+                borderS = obj.gameObject;
+                RotateBot(-4); // Example value for BorderS
+                Debug.Log("BorderS found: " + borderS.name);
+            }
+            else if (obj.gameObject.name == "BorderE")
+            {
+                borderE = obj.gameObject;
+                RotateBot(4); // Example value for BorderE
+                Debug.Log("BorderE found: " + borderE.name);
+            }
+            else if (obj.gameObject.name == "BorderW")
+            {
+                borderW = obj.gameObject;
+                RotateBot(-4); // Example value for BorderW
+                Debug.Log("BorderW found: " + borderW.name);
+            }
+            else if (obj.gameObject.name == "BorderN")
+            {
+                borderN = obj.gameObject;
+                RotateBot(4); // Example value for BorderN
+
+                Debug.Log("BorderN found: " + borderN.name);
+            }
+        }
+
+        // Adjust rotation based on the found borders
+        return rotate;
+    }
+
+    private void RotateBot(float z)
+    {
+        float rotationSpeed = 10f; // Assign a default rotation speed or set it in the inspector
+
+        bool validateRotate = ValidateRotate(z);
+
+        if (validateRotate)
+        {
+            transform.rotation *= Quaternion.Euler(0, 0, rotationSpeed * z);
+        }
+    }
+
+    private bool ValidateRotate(float rotate)
+    {
+        if (!BetweenOne(rotate))
+        {
+            Debug.LogError("Rotate failed Validation");
+            return false;
+        }
+        return true;
+    }
+
+    private bool BetweenOne(float value)
+    {
+        return value >= -1f && value <= 1f;
+    }*/
 
     private BotCommands PlayerFound(Collider2D player)
     {
@@ -78,10 +223,11 @@ public class RoseBotScript : IBotScript
         return new BotCommands(move, rotate, shoot);
     }
 
-    private BotCommands SearchForPlayer(Collider2D player)
+    private BotCommands SearchForPlayer(GameObject player)
     {
         BotCommands botCommands;
-        if (player == null || player != null )
+
+        if (player != null )
         {
             // Assuming 'RoseBot' is your current GameObject (e.g., the bot itself)
             Vector2 pos = RoseBot.transform.position;
@@ -92,11 +238,11 @@ public class RoseBotScript : IBotScript
             float rotate = 0f;
 
             // Determine rotation based on angle
-            if (angle < -60.0F)
+            if (angle < -95.0F)
             {
                 rotate = 1f;
             }
-            else if (angle > 60.0F)
+            else if (angle > 95.0F)
             {
                 rotate = -1f;
             }
@@ -106,8 +252,7 @@ public class RoseBotScript : IBotScript
         }
         else
         {
-            // If no borders were found, return default BotCommands (no movement, no rotation, no shooting)
-           
+            
             return new BotCommands(Vector2.zero, 0f, false);
         }
     }
