@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.Progress;
 using static UnityEngine.GraphicsBuffer;
 
 public class BotScript : MonoBehaviour
@@ -79,19 +81,20 @@ public class BotScript : MonoBehaviour
 
     }
 
-    private List<Collider2D> CheckConeCollision ()
+    private string CheckConeCollision ()
 	{
         Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, viewRadius);
+        BotInput botInput = new();
 
-        List<Collider2D> raycastHitsSeen = new();
         if (raycastHits.Length > 0)
         {
             foreach (Collider2D raycastHit in raycastHits)
             {
+                bool isSeen = false;
                 //Lets pretend you can hear bullets
                 if (raycastHit.CompareTag("bullet") || raycastHit.CompareTag("border"))
                 {
-                    raycastHitsSeen.Add(raycastHit);
+                    isSeen = true;
                 }
                 else
                 {
@@ -101,13 +104,43 @@ public class BotScript : MonoBehaviour
 
                     if (angle <= viewAngle / 2.0f) // Object is within half the cone angle
                     {
-                        raycastHitsSeen.Add(raycastHit);
+                        isSeen = true;
+
+                    }
+                }
+
+                if (isSeen)
+                {
+
+                    if (raycastHit.CompareTag("bullet"))
+                    {
+                        botInput.bullets.Add(MapColliderToBullet(raycastHit));
+                    }
+                    else if (raycastHit.name.Contains("Circle"))
+                    {
+                        botInput.obstacles.Add(MapColliderTObstacle(raycastHit));
+                    }
+                    else if (raycastHit.CompareTag("border"))
+                    {
+                        botInput.borders.Add(MapColliderToBorder(raycastHit));
+                    }
+                    else if (raycastHit.transform == transform)
+                    {
+                        botInput.player = MapColliderToPlayer(raycastHit.gameObject);
+                    }
+                    else
+                    {
+                        botInput.otherPlayers.Add(MapColliderToPlayer(raycastHit.gameObject));
                     }
                 }
             }
         }
-       
-        return raycastHitsSeen;
+
+
+
+        string json = JsonUtility.ToJson(botInput,true);
+
+          return json;
        
     }
 
@@ -139,6 +172,7 @@ public class BotScript : MonoBehaviour
         Physics2D.IgnoreCollision(duplicateBullet.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         duplicateBullet.transform.GetComponent<Rigidbody2D>().velocity = transform.GetComponent<Rigidbody2D>().velocity;
         duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * bulletForce);
+        duplicateBullet.transform.SetParent (transform);
 		duplicateBullet.gameObject.name = "Bullet"+Time.time;
     }
 
@@ -192,5 +226,49 @@ public class BotScript : MonoBehaviour
 		return value<=1 && value >= -1;
 	}
 
-   
+    Player MapColliderToPlayer(GameObject gameObject)
+    {
+        
+
+        Player player = new();
+        player.position = gameObject.transform.position;
+        player.rotation = gameObject.transform.rotation;
+        player.velocity = gameObject.GetComponent<Rigidbody2D>().velocity;
+        player.color = gameObject.GetComponent<Renderer>().material.color;
+
+        return player;
+       
+    }
+    Border MapColliderToBorder(Collider2D collider)
+    {
+        Border border = new Border();
+        border.position = collider.transform.position;
+        border.width = collider.GetComponent<Renderer>().bounds.size.x;
+        border.height = collider.GetComponent<Renderer>().bounds.size.y;
+
+        return border;
+    }
+    Bullet MapColliderToBullet(Collider2D collider)
+    {
+
+        Bullet bullet = new Bullet();
+        bullet.position = collider.transform.position;
+        bullet.velocity = collider.GetComponent <Rigidbody2D>().velocity;
+        bullet.force = collider.GetComponent<Rigidbody2D>().totalForce;
+        var parent = collider.transform.parent.transform.gameObject;
+        bullet.firedBy = MapColliderToPlayer(parent);
+
+        return bullet;
+
+    }
+    Obstacle MapColliderTObstacle(Collider2D collider)
+    {
+
+        Obstacle obstacle = new Obstacle();
+        obstacle.position = collider.transform.position;
+        obstacle.velocity = collider.GetComponent<Rigidbody2D>().velocity;
+        obstacle.radius = collider.GetComponent<CircleCollider2D>().radius;
+
+        return obstacle;
+    }
 }

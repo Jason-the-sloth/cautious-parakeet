@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotationSpeed: 0.5
-  shootingInterval: 1
+  shootingInterval: 0.4
   bulletForce: 300
   viewRadius: 4
   viewAngle: 100

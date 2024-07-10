@@ -9,9 +9,11 @@ public class BasicBotScript : IBotScript
 	
 	public BasicBotScript() { }
 
-	public BotCommands GetCommands(List<Collider2D> colliders)
-	{
-		Dictionary<String, List<Collider2D>> colliderMap = new();
+	public BotCommands GetCommands(string botinput)
+    {
+        var colliders = new List<Collider2D>();
+
+        Dictionary<String, List<Collider2D>> colliderMap = new();
 
 		if (me == null)
 		{

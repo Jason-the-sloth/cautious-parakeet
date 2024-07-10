@@ -6,217 +6,120 @@ using Unity.Mathematics;
 using Unity.Collections.LowLevel.Unsafe;
 using UnityEditor;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public class TiyaniBotScript : IBotScript
 {
-    Collider2D BorderW,
-        BorderE,
-        BorderN,
-        BorderS;
 
-    public enum MovementType
+    enum ObjectType
     {
-        RIGHT, LEFT, UP, DOWN,IDLE
+        ENEMY, BULLET, OBSTACLE, NOTHING
     }
-    List<MovementType> MovementTypes = Enum.GetValues(typeof(MovementType)).Cast<MovementType>().ToList();
+    float Tolerance = 0.3f;
 
-    public enum RotationType
-    {
-        RIGHT, LEFT
-    }
-    float Tolerance = 0.1f;
-
-    Vector2 Movement;
-    float Rotation;
-    bool Shoot;
-
-    //List<Collider2D> Collider2Ds = new List<Collider2D>();
-    Collider2D Bot = null;
     public TiyaniBotScript() { }
 
-    public BotCommands GetCommands(List<Collider2D> gameObjects)
+    public BotCommands GetCommands(string botinput)
     {
-        ResetBotCommands();
-        //Collider2Ds = gameObjects;
-        Bot = gameObjects.Where(c => c.name == nameof(TiyaniBotScript)).FirstOrDefault();
+        var movement = Vector2.zero;
+        var gameObjects = new List<Collider2D>();
 
-        OnObjects(gameObjects);
-        BotCommands botCommands = new(Movement, Rotation, Shoot);
+        float rotation = 0f;
+        bool shoot = false;
+
+        var player = gameObjects.Where(obj => obj.name == nameof(TiyaniBotScript)).FirstOrDefault();
+
+        var bullets = gameObjects.Where(obj => obj.CompareTag("bullet")).ToList();
+        var enemies = gameObjects.Where(obj => obj.name != nameof(TiyaniBotScript) && obj.CompareTag("player")).ToList();
+        var borders = gameObjects.Where(obj => obj.CompareTag("border")).ToList();
+
+        ObjectType action = GetAction(bullets,enemies,borders);
+
+        switch (action)
+        {
+            case ObjectType.ENEMY:
+                shoot = SameLine(enemies.FirstOrDefault(),Vector2.left, player.transform.position);
+                rotation = DetermineRotation(enemies.FirstOrDefault().transform.position, player.transform.position ); // Rotate towards enemy
+                movement = Vector2.zero; // Stop movement
+                Debug.Log($"action : {ObjectType.ENEMY} : {rotation}" );
+
+                break;
+            case ObjectType.OBSTACLE:
+                //shoot = false;
+                //rotation = DetermineRotation(borders.FirstOrDefault().transform.position, player.transform.position); // Rotate to avoid obstacle
+                //movement = CalculateSafeMovement(borders.FirstOrDefault().transform.position, player.transform.position); // Move around obstacle
+                //Debug.Log($"action : {ObjectType.OBSTACLE}");
+
+                break;
+            case ObjectType.BULLET :
+                    //shoot = false;
+                    //rotation = 0f;
+                    //movement = Vector2.zero; // Stop movement or adjust based on bullet impact
+                    //Debug.Log($"action : {ObjectType.BULLET}");
+                break;
+            case ObjectType.NOTHING:
+                //shoot = false;
+                //rotation = 0f;
+                //movement = Vector2.up;
+                //Debug.Log($"action : {ObjectType.NOTHING}");
+
+                break;
+        }
+
+        BotCommands botCommands = new(movement, rotation, shoot);
 
         return botCommands;
     }
 
-    void ResetBotCommands()
+    private ObjectType GetAction(List<Collider2D> bullets, List<Collider2D> enemies , List<Collider2D> borders)
     {
-        //Collider2Ds.Clear();
-        Shoot = false;
-        Rotation = 0f;
-        Movement = Vector2.zero;
+   
+        if (bullets.Any())
+        {
+            return ObjectType.BULLET;
+        }
+        if (enemies.Any())
+        {
+            return ObjectType.ENEMY;
+        }
+        if (borders.Any())
+        {
+            return ObjectType.OBSTACLE;
+        }
 
-        BorderW = null;
-        BorderE =null;
-        BorderN  = null;
-        BorderS = null;
+        return ObjectType.NOTHING;
+    }
+    private float DetermineRotation(Vector3 targetPosition , Vector3 playerPosition)
+    {
+        float rotate = 0f;
+        float angle = Vector2.SignedAngle(Vector3.zero - playerPosition, Vector3.up);
+
+        if (angle < -20.0F)
+        {
+            rotate = 1f;
+        }
+        else if (angle > 20.0F)
+        {
+            rotate = -1f;
+        }
+
+        return rotate;
     }
 
-    public Vector2 Move(MovementType movement)
+    private Vector2 CalculateSafeMovement(Vector3 obstaclePosition, Vector3 playerPosition)
     {
-        bool canMakeThisMove = IsValidMove(movement);
-        if (!canMakeThisMove) {
-            foreach (var move in MovementTypes)
-            {
-                if (IsValidMove(move))
-                {
-                    movement = move;
-                    break;
-                }
-            }
-        }
-        switch (movement)
-        {
-            case MovementType.LEFT:
-                return Vector2.left;
-
-            case MovementType.DOWN:
-                return Vector2.down;
-
-            case MovementType.RIGHT:
-                return Vector2.right;
-
-            case MovementType.UP:
-                return Vector2.up;
-
-            default:
-                return Vector2.zero;
-        }
-
+       
+        Vector2 obstacleDir = obstaclePosition - playerPosition;
+        var move = new Vector2(obstacleDir.y, -obstacleDir.x).normalized;
+       
+        return move;
     }
-
-    public void OnObjects(List<Collider2D> Collider2Ds)
-    {
-        var bullets = Collider2Ds.Where(c => c.CompareTag("bullet")).ToList();
-        var borders = Collider2Ds.Where(c => c.CompareTag("border")).ToList();
-
-         BorderW = borders.Where(b => b.name == "BoardW").DefaultIfEmpty(null).First();
-         BorderE = borders.Where(b => b.name == "BorderE").DefaultIfEmpty(null).First();
-         BorderN = borders.Where(b => b.name == "BoardN").DefaultIfEmpty(null).First();
-         BorderS = borders.Where(b => b.name == "BoardS").DefaultIfEmpty(null).First();
-        #region on  bullet(s)
-        if (bullets.Count != 0 )
-        {
-            foreach (var bullet in bullets)
-            {
-                bool sameLineHorizontal = SameLine(bullet,Vector2.left);
-                if (sameLineHorizontal)
-                {
-                    // move up or down
-                    if (borders.Count == 0)
-                    {
-                        Movement = Move(MovementType.UP);
-                        Rotation = Follow(bullet);
-                        return;
-                    }
-                    else
-                    {
-              
-
-                        if (BorderN != null)
-                        {
-                            Movement = Move(MovementType.DOWN);
-                            return;
-                        }
-                        else if (BorderS != null)
-                        {
-                            Movement = Move(MovementType.UP);
-                            return;
-                        }
-                        else {
-
-                            Movement = Move(MovementType.DOWN); // Default to down
-                            return;
-
-                        }
-
-
-                    }
-                }
-
-                bool sameLineVertical = SameLine(bullet,Vector2.up);
-                if (sameLineVertical)
-                {
-                    if (borders.Count == 0)
-                    {
-                        Movement  = Move(MovementType.RIGHT);
-                        Rotation = Follow(bullet);
-                    }
-                    else
-                    {
-                        
-
-                        if (BorderW != null)
-                        {
-                            Movement = Move(MovementType.RIGHT);
-                            Rotation = Follow(bullet);
-                            return;
-                        }
-                        else if (BorderE != null)
-                        {
-                            Movement = Move(MovementType.LEFT);
-                            Rotation = Follow(bullet);
-                            return;
-                        }
-                        else
-                        {
-
-                            Movement = Move(MovementType.LEFT); // Default to down
-                            Rotation = Follow(bullet);
-                            return ;
-                        }
-                    }
-                    
-                }
-
-            }
-        }
-        #endregion
-        #region on enemies
-
-        var enemies = Collider2Ds.Where(c => !(c.CompareTag("bullet")) && !(c.CompareTag("border")) && !c.name.Contains("DupCircle")).ToList();
-
-        if (enemies.Count != 0)
-        {
-            foreach (var enemy in enemies)
-            {
-                if (enemy.name != nameof(TiyaniBotScript))
-                {
-                    //bool onSameLineUp = SameLine(enemy, Vector2.up);
-                    //if (onSameLineUp)
-                    //{
-                    //    Shoot = true;
-                    //    Rotation = Follow(enemy);
-                    //    Movement = Vector2.up;
-                    //    return;
-                    //}
-                    Shoot = true;
-                    Rotation = Follow(enemy);
-                }
-            }
-        }
-
-        #endregion
-        #region on nothing
-
-        #endregion
-
-    }
-
-
-
-    bool SameLine(Collider2D target, Vector2 dir)
+    bool SameLine(Collider2D target, Vector2 dir, Vector3 bot)
     {
 
-
-        Vector3 distance = Bot.transform.position - target.transform.position;
+        Vector3 distance = bot - target.transform.position;
         float dotProduct = Vector3.Dot(distance.normalized, dir);
 
         if (Mathf.Abs(dotProduct) > (1 - Tolerance))
@@ -225,48 +128,8 @@ public class TiyaniBotScript : IBotScript
         }
         else
         {
-            return false;
+           return false;
         }
-    }
-
-    bool IsValidMove( MovementType movementType) {
-
-        var x = Bot.transform.position.x;
-        var y = Bot.transform.position.y;
-
-        if (movementType == MovementType.LEFT && BorderW != null) {
-
-            return x > BorderW.transform.position.x+1; 
-        }
-        else if (movementType == MovementType.RIGHT && BorderE != null) {
-
-            return x < BorderE.transform.position.x -1;
-        }
-        else if (movementType == MovementType.UP && BorderN != null) {
-
-            return y < BorderN.transform.position.y-1;
-        }
-        else if (movementType == MovementType.DOWN && BorderS != null) {
-
-            return y > BorderS.transform.position.y+1;
-
-        }else if (BorderW == null && BorderE == null && BorderS == null && BorderN == null)
-        {
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    float Follow(Collider2D target) {
-
-        Vector3 normalizedDirection = (target.transform.position - Bot.transform.position).normalized;
-
-        float targetAngle = Mathf.Atan2(normalizedDirection.y, normalizedDirection.x) * Mathf.Rad2Deg;
-        targetAngle = Mathf.Clamp(targetAngle, -180f, 180f) / 360f; 
-        float rotationAmount = Vector3.Dot(Bot.transform.position.normalized, normalizedDirection) * Mathf.DeltaAngle(Bot.transform.eulerAngles.z, targetAngle);
-
-        return Mathf.SmoothStep(-1f, 1f, Mathf.Lerp(-100f, 100f, rotationAmount));
     }
 }
 

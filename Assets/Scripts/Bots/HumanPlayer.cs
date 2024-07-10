@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HumanPlayer : IBotScript
 {
-    public BotCommands GetCommands(List<Collider2D> objects)
+    public BotCommands GetCommands(string botinput)
     {
         BotCommands botCommands = new(Move(), Rotate(), Shoot());
 

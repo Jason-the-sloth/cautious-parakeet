@@ -1,6 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 public class PlayerSetUpScript : MonoBehaviour
@@ -31,7 +30,8 @@ public class PlayerSetUpScript : MonoBehaviour
 		player.transform.Rotate(new Vector3(0, 0, 180 - Vector2.SignedAngle(vec, Vector2.up)));
 		player.name = name;
 		player.transform.SetParent(transform);
-		player.GetComponent<BotScript>().SetBotScript(botScript);
+		player.GetComponent<Renderer>().material.color = UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        player.GetComponent<BotScript>().SetBotScript(botScript);
 	}
 
 	// Update is called once per frame
