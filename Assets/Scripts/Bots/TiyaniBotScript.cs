@@ -21,7 +21,7 @@ public class TiyaniBotScript : IBotScript
 
     public TiyaniBotScript() { }
 
-    public BotCommands GetCommands(string botinput)
+    public BotCommands GetCommands(BotInput botInput)
     {
         var movement = Vector2.zero;
         var gameObjects = new List<Collider2D>();

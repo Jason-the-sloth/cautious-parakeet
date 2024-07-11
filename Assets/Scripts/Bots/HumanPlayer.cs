@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HumanPlayer : IBotScript
 {
-    public BotCommands GetCommands(string botinput)
+    public BotCommands GetCommands(BotInput botinput)
     {
         BotCommands botCommands = new(Move(), Rotate(), Shoot());
 

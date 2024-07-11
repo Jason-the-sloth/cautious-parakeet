@@ -81,7 +81,7 @@ public class BotScript : MonoBehaviour
 
     }
 
-    private string CheckConeCollision ()
+    private BotInput CheckConeCollision()
 	{
         Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, viewRadius);
         BotInput botInput = new();
@@ -136,18 +136,12 @@ public class BotScript : MonoBehaviour
             }
         }
 
-
-
-        string json = JsonUtility.ToJson(botInput,true);
-
-        return json;
-       
+        return botInput;
     }
 
 
     private void Shoot(bool shoot)
     {
-
         if(lastFired >= 0)
             lastFired -= Time.deltaTime;
     
@@ -162,7 +156,6 @@ public class BotScript : MonoBehaviour
 		{
 			Debug.Log("Shooting is on cooldown");
 		}
-        
     }
 
     private void CreateBullet()

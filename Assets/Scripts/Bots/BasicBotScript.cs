@@ -9,7 +9,7 @@ public class BasicBotScript : IBotScript
 	
 	public BasicBotScript() { }
 
-	public BotCommands GetCommands(string botinput)
+	public BotCommands GetCommands(BotInput botinput)
     {
         var colliders = new List<Collider2D>();
 
