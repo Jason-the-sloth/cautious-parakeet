@@ -179,16 +179,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365801135860132522}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: 8bacaa710d822034eb72d17c3b35919d, type: 3}
+=======
+  m_Script: {fileID: 11500000, guid: 13e723a1525a36a478b339f65e78f901, type: 3}
+>>>>>>> main
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
   rotationSpeed: 0.5
+<<<<<<< HEAD
   shootingInterval: 0.2
   bulletForce: 300
   viewRadius: 2
   viewAngle: 90
   bullet: {fileID: 1819433039985643459, guid: 72db5f91fe1764a499e252307fbb3ca8, type: 3}
+=======
+  shootingInterval: 0.4
+  bulletForce: 300
+  viewRadius: 4
+  viewAngle: 100
+  bullet: {fileID: 1819433039985643459, guid: 898773ac5a051684d8ec92d804b02883, type: 3}
+>>>>>>> main
 --- !u!1 &2903982994774708429
 GameObject:
   m_ObjectHideFlags: 0

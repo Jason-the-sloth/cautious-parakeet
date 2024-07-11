@@ -195,12 +195,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 433397893}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: 8f123aaf1d39b6a438be1d64f4225b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerTriangle: {fileID: 1365801135860132522, guid: dced355175f14d841b4e1c356e5266d2, type: 3}
   p1: {x: -2, y: 2}
   p2: {x: 2, y: -2}
+=======
+  m_Script: {fileID: 11500000, guid: 3cfa6634ebec19249bf355e38fde69ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerTriangle: {fileID: 1365801135860132522, guid: e178171a9c7b82343bd19507aae05c85, type: 3}
+  p1: {x: 0, y: 0}
+  p2: {x: -8, y: -4}
+>>>>>>> main
 --- !u!1 &1073633554
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +236,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1073633554}
   m_Enabled: 1
   m_EditorHideFlags: 0
+<<<<<<< HEAD
   m_Script: {fileID: 11500000, guid: cb51f8fa33997c0478c180f80ccc0574, type: 3}
+=======
+  m_Script: {fileID: 11500000, guid: f855a822181a0d24f8b375689738e83d, type: 3}
+>>>>>>> main
   m_Name: 
   m_EditorClassIdentifier: 
   rectangleWidth: 10
@@ -545,7 +558,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1714492540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f9e6327c22310b3499aca086a29d7c9e, type: 3}
+  m_Script: {fileID: 11500000, guid: fb3ce6ef633cc464b9d3a7fcf29d6f46, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1737791253

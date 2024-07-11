@@ -3,5 +3,5 @@ using UnityEngine;
 
 public interface IBotScript
 {
-	public BotCommands GetCommands(List<Collider2D> objects);
+	public BotCommands GetCommands(string botinput);
 }
