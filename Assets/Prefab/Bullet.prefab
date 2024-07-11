@@ -172,11 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1819433039985643459}
   m_Enabled: 1
   m_EditorHideFlags: 0
-<<<<<<< HEAD
-  m_Script: {fileID: 11500000, guid: da68351c6a50d7742891d75743632bcf, type: 3}
-=======
   m_Script: {fileID: 11500000, guid: 66b26eb3cc40f924cb3dfe2aae851416, type: 3}
->>>>>>> main
   m_Name: 
   m_EditorClassIdentifier: 
   deathCount: 1000
