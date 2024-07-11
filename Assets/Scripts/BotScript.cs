@@ -116,7 +116,7 @@ public class BotScript : MonoBehaviour
                     {
                         botInput.bullets.Add(MapColliderToBullet(raycastHit));
                     }
-                    else if (raycastHit.name.Contains("Circle"))
+                    else if (raycastHit.CompareTag("obstacle"))
                     {
                         botInput.obstacles.Add(MapColliderTObstacle(raycastHit));
                     }
@@ -140,7 +140,7 @@ public class BotScript : MonoBehaviour
 
         string json = JsonUtility.ToJson(botInput,true);
 
-          return json;
+        return json;
        
     }
 
@@ -226,11 +226,11 @@ public class BotScript : MonoBehaviour
 		return value<=1 && value >= -1;
 	}
 
-    Player MapColliderToPlayer(GameObject gameObject)
+    BotInput.Player MapColliderToPlayer(GameObject gameObject)
     {
-        
 
-        Player player = new();
+
+        BotInput.Player player = new();
         player.position = gameObject.transform.position;
         player.rotation = gameObject.transform.rotation;
         player.velocity = gameObject.GetComponent<Rigidbody2D>().velocity;
@@ -239,19 +239,19 @@ public class BotScript : MonoBehaviour
         return player;
        
     }
-    Border MapColliderToBorder(Collider2D collider)
+    BotInput.Border MapColliderToBorder(Collider2D collider)
     {
-        Border border = new Border();
+        BotInput.Border border = new BotInput.Border();
         border.position = collider.transform.position;
         border.width = collider.GetComponent<Renderer>().bounds.size.x;
         border.height = collider.GetComponent<Renderer>().bounds.size.y;
 
         return border;
     }
-    Bullet MapColliderToBullet(Collider2D collider)
+    BotInput.Bullet MapColliderToBullet(Collider2D collider)
     {
 
-        Bullet bullet = new Bullet();
+        BotInput.Bullet bullet = new ();
         bullet.position = collider.transform.position;
         bullet.velocity = collider.GetComponent <Rigidbody2D>().velocity;
         bullet.force = collider.GetComponent<Rigidbody2D>().totalForce;
@@ -261,10 +261,10 @@ public class BotScript : MonoBehaviour
         return bullet;
 
     }
-    Obstacle MapColliderTObstacle(Collider2D collider)
+    BotInput.Obstacle MapColliderTObstacle(Collider2D collider)
     {
 
-        Obstacle obstacle = new Obstacle();
+        BotInput.Obstacle obstacle = new ();
         obstacle.position = collider.transform.position;
         obstacle.velocity = collider.GetComponent<Rigidbody2D>().velocity;
         obstacle.radius = collider.GetComponent<CircleCollider2D>().radius;
