@@ -1,0 +1,10 @@
+﻿namespace Control.Models
+{
+    [Serializable]
+    public class Obstacle
+    {
+        public SimpleVector Position { get; set; }
+        public SimpleVector Velocity { get; set; }
+        public float Radius { get; set; }
+    }
+}

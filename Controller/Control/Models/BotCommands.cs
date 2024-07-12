@@ -1,42 +1,25 @@
-﻿using UnityEngine;
-
-namespace Control.Models
+﻿namespace Control.Models
 {
     public class BotCommands
     {
-        private Vector2 move;
+        public SimpleVector Move { get; private set; }
 
-        private readonly float rotate;
+        public float Rotate { get; private set; }
 
-        private readonly bool shoot;
+        public bool Shoot { get; private set; }
 
         public BotCommands()
         {
-            move = Vector2.zero;
-            rotate = 0f;
-            shoot = false;
+            Move = SimpleVector.Zero;
+            Rotate = 0f;
+            Shoot = false;
         }
 
-        public BotCommands(Vector2 move, float rotate, bool shoot)
+        public BotCommands(SimpleVector move, float rotate, bool shoot)
         {
-            this.move = move;
-            this.rotate = rotate;
-            this.shoot = shoot;
-        }
-
-        public Vector2 GetMove()
-        {
-            return move;
-        }
-
-        public float GetRotate()
-        {
-            return rotate;
-        }
-
-        public bool GetShoot()
-        {
-            return shoot;
+            Move = move;
+            Rotate = rotate;
+            Shoot = shoot;
         }
     }
 }

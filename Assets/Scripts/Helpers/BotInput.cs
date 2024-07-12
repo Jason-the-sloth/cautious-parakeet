@@ -48,10 +48,4 @@ public class BotInput
         public float width;
         public float height;
     }
-
 }
-
-
-
-
-

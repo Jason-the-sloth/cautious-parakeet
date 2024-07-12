@@ -1,12 +1,10 @@
 ﻿using Control.Controllers;
 using Control.Models;
-using UnityEngine;
 
 namespace Control.Services
 {
     public class BotService : IBotService
     {
-        private GameObject botGameObject;
         private readonly ILogger<BotController> _logger;
 
         public BotService(ILogger<BotController> logger)
@@ -14,54 +12,27 @@ namespace Control.Services
             _logger = logger;
         }
 
-        public BotCommands GetCommands(List<Collider2D> colliders)
+        public BotCommands GetCommands(BotInput botInput)
         {
-            var colliderMap = new Dictionary<String, List<Collider2D>>();
-
-            SetGameObject(colliders);
-
-            if (botGameObject == null)
+            if (botInput?.Player == null)
             {
-                new BotCommands();
-            }
-
-            foreach (var collider in colliders)
-            {
-                var gameObject = collider.gameObject;
-                var tag = gameObject.tag;
-                if (gameObject == botGameObject) continue;
-
-                if (!colliderMap.ContainsKey(tag))
-                {
-                    colliderMap[tag] = new List<Collider2D>();
-                }
-
-                colliderMap[tag].Add(collider);
+                return new BotCommands();
             }
 
             //if found the enemy player shoot at and try to maintain distance
-            if (colliderMap.TryGetValue("player", out var enemy))
+            if (botInput.OtherPlayers != null)
             {
-                return FoundEnemy(enemy[0]);
+                return FoundEnemy(botInput.Player, botInput.OtherPlayers[0]);
             }
-            //else search
-            else if (colliderMap.TryGetValue("border", out var borders))
-            {
-                return SearchForEnemy(borders);
-            }
-
-            return new BotCommands();
+            return SearchForEnemy(botInput.Player, botInput.Borders);
         }
 
-        private BotCommands SearchForEnemy(List<Collider2D> borders)
+        private BotCommands SearchForEnemy(Player player, List<Border> borders)
         {
-            BotCommands botCommands;
             if (borders != null && borders.Count > 0)
             {
-                Vector2 pos = botGameObject.transform.position;
                 float rotate = 0f;
-
-                float angle = Vector2.SignedAngle(Vector2.zero - pos, botGameObject.transform.up);
+                float angle = SimpleVector.SignedAngle(SimpleVector.Zero - player.Position, SimpleVector.Up);
 
                 if (angle < -20.0F)
                 {
@@ -71,23 +42,19 @@ namespace Control.Services
                 {
                     rotate = -1f;
                 }
-                botCommands = new(Vector2.up, rotate, false);
+                return new(SimpleVector.Up, rotate, false);
             }
-            else
-            {
-                //fly straight
-                botCommands = new(Vector2.up, 0f, false);
-            }
-            return botCommands;
+            //fly straight
+            return new(SimpleVector.Up, 0f, false);
         }
 
-        private BotCommands FoundEnemy(Collider2D firstPlayer)
+        private BotCommands FoundEnemy(Player player, Player enemy)
         {
-            Vector2 move = Vector2.zero;
+            SimpleVector move = SimpleVector.Zero;
             float rotate = 0f;
             bool shoot = false;
 
-            float angle = Vector2.SignedAngle(firstPlayer.transform.position - botGameObject.transform.position, botGameObject.transform.up);
+            float angle = SimpleVector.SignedAngle(enemy.Position - player.Position, SimpleVector.Up);
 
             if (angle < -5.0F)
             {
@@ -102,28 +69,16 @@ namespace Control.Services
                 shoot = true;
             }
 
-            float distance = Vector2.Distance(firstPlayer.transform.position, botGameObject.transform.position);
+            float distance = SimpleVector.Distance(enemy.Position, player.Position);
             if (distance > 4)
             {
-                move = Vector2.up;
+                move = SimpleVector.Up;
             }
             else if (distance < 2)
             {
-                move = Vector2.down;
+                move = SimpleVector.Down;
             }
             return new BotCommands(move, rotate, shoot);
-        }
-
-        private void SetGameObject(List<Collider2D> colliders)
-        {
-            foreach (Collider2D collider in colliders)
-            {
-                if (collider.gameObject.CompareTag("player"))
-                {
-                    botGameObject = collider.gameObject;
-                    _logger.LogDebug("I am {name}", botGameObject.name);
-                }
-            }
         }
     }
 }

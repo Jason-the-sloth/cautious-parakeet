@@ -1,7 +1,6 @@
 using Control.Models;
 using Control.Services;
 using Microsoft.AspNetCore.Mvc;
-using UnityEngine;
 
 namespace Control.Controllers
 {
@@ -19,9 +18,9 @@ namespace Control.Controllers
         }
 
         [HttpPost(Name = "Process")]
-        public async Task<BotCommands> Post(List<Collider2D> colliders)
+        public async Task<BotCommands> Post(BotInput botInput)
         {
-            return await new Task<BotCommands>(() => _botService.GetCommands(colliders));
+            return await new Task<BotCommands>(() => _botService.GetCommands(botInput));
         }
     }
 }
