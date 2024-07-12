@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d0855475c9135c42b0142158c2095e3, type: 3}
+  m_Name: GlobalVariables
+  m_EditorClassIdentifier: 
+  rectangleWidth: 10
+  rectangleHeight: 10
+  moveSpeed: 10
+  rotationSpeed: 0.5
+  shootingInterval: 2
+  bulletForce: 200
+  viewRadius: 5
+  viewAngle: 100
+  playerTriangle: {fileID: 1365801135860132522, guid: e178171a9c7b82343bd19507aae05c85, type: 3}
+  p1: {x: 0, y: 0}
+  p2: {x: 0, y: 0}
+  deathCount: 974.9148
+  Width: 10
+  Height: 10
+  bullet: {fileID: 1819433039985643459, guid: 898773ac5a051684d8ec92d804b02883, type: 3}

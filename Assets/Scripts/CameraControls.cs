@@ -5,12 +5,13 @@ using UnityEngine;
 
 public class CameraControls : MonoBehaviour
 {
-    public float moveSpeed = 10.0f;
+    public GlobalVariables globalVariables;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        globalVariables = Resources.Load<GlobalVariables>("GlobalVariables");
+
     }
 
     // Update is called once per frame
@@ -37,6 +38,6 @@ public class CameraControls : MonoBehaviour
             moveDirection += Vector3.down;
         }
 
-        transform.Translate(moveDirection * moveSpeed * Time.deltaTime, Space.World);
+        transform.Translate(moveDirection * globalVariables.cameraMoveSpeed * Time.deltaTime, Space.World);
     }
 }
