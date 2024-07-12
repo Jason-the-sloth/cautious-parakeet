@@ -6,11 +6,13 @@ using UnityEngine;
 public class BulletScript : MonoBehaviour
 {
 
-    public float deathCount = 1000;
-
+    public GlobalVariables globalVariables;
+    public GameObject shotOwner;
+    
     // Start is called before the first frame update
     void Start()
     {
+        globalVariables = Resources.Load<GlobalVariables>("GlobalVariables");
 
 
     }
@@ -19,10 +21,10 @@ public class BulletScript : MonoBehaviour
     void Update()
     {
         Vector2 velocity = GetComponent<Rigidbody2D>().velocity;
-        
 
-        deathCount-=Time.deltaTime;
-        if(deathCount < 1 || GetComponent<Rigidbody2D>().velocity.magnitude < 1)
+
+        globalVariables.deathCount -= Time.deltaTime;
+        if(globalVariables.deathCount < 1 || GetComponent<Rigidbody2D>().velocity.magnitude < 1)
         {
             Destroy(transform.gameObject);
         }
