@@ -12,16 +12,11 @@ using static UnityEngine.GraphicsBuffer;
 
 public class BotScript : MonoBehaviour
 {
-	//Game Variables
-    public float moveSpeed = 10.0f;
-    public float rotationSpeed = 0.5f;
-    public float shootingInterval;
-    public float bulletForce;
-	public float viewRadius;
-	public float viewAngle;
+    public GlobalVariables globalVariables;
+
+   
 
 	//Game Objects
-    public GameObject bullet;
     private GameObject bullets;
 	public IBotScript botScript = new HumanPlayer();
 
@@ -39,7 +34,8 @@ public class BotScript : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-		botScript ??= new HumanPlayer();
+        globalVariables = Resources.Load<GlobalVariables>("GlobalVariables");
+        botScript ??= new HumanPlayer();
 		bullets = GameObject.Find("Bullets");
 
         CreateArcAndCircle();
@@ -68,21 +64,21 @@ public class BotScript : MonoBehaviour
         Transform arc1 = transform.Find("CollisionLine1");
         Transform arc2 = transform.Find("CollisionLine2");
 
-        circle.localScale = new Vector3(viewRadius*2, viewRadius*2);
+        circle.localScale = new Vector3(globalVariables.viewRadius * 2, globalVariables.viewRadius *2);
 
-        arc1.localScale = new Vector3(0.01f, viewRadius );
-        arc1.Rotate(new Vector3(0, 0, viewAngle/2 ));
-        arc1.position += arc1.up * (viewRadius / 2);
+        arc1.localScale = new Vector3(0.01f, globalVariables.viewRadius );
+        arc1.Rotate(new Vector3(0, 0, globalVariables.viewAngle / 2 ));
+        arc1.position += arc1.up * (globalVariables.viewRadius / 2);
 
-        arc2.localScale = new Vector3(0.01f, viewRadius );
-        arc2.Rotate(new Vector3(0, 0, -viewAngle/2));
-        arc2.position += arc2.up * (viewRadius / 2);
+        arc2.localScale = new Vector3(0.01f, globalVariables.viewRadius);
+        arc2.Rotate(new Vector3(0, 0, -globalVariables.viewAngle /2));
+        arc2.position += arc2.up * (globalVariables.viewRadius / 2);
 
     }
 
     private BotInput CheckConeCollision()
 	{
-        Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, viewRadius);
+        Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, globalVariables.viewRadius);
         BotInput botInput = new();
 
         if (raycastHits.Length > 0)
@@ -101,7 +97,7 @@ public class BotScript : MonoBehaviour
 
                     float angle = Vector3.Angle(targetDir, transform.up);
 
-                    if (angle <= viewAngle / 2.0f) // Object is within half the cone angle
+                    if (angle <= globalVariables.viewAngle / 2.0f) // Object is within half the cone angle
                     {
                         isSeen = true;
 
@@ -146,7 +142,7 @@ public class BotScript : MonoBehaviour
     
         if (shoot && (lastFired < 0f))
         {
-            lastFired = shootingInterval;
+            lastFired = globalVariables.shootingInterval;
 
             CreateBullet();
 
@@ -159,13 +155,14 @@ public class BotScript : MonoBehaviour
 
     private void CreateBullet()
     {
-        GameObject duplicateBullet = Instantiate(bullet, transform.position+(transform.up * 0.5f), transform.rotation * Quaternion.Euler(0, 0, 90));
+        GameObject duplicateBullet = Instantiate(globalVariables.bullet, transform.position+(transform.up * 0.5f), transform.rotation * Quaternion.Euler(0, 0, 90));
         duplicateBullet.transform.SetParent(bullets.transform, true);
         Physics2D.IgnoreCollision(duplicateBullet.GetComponent<Collider2D>(), GetComponent<Collider2D>());
         duplicateBullet.transform.GetComponent<Rigidbody2D>().velocity = transform.GetComponent<Rigidbody2D>().velocity;
-        duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * bulletForce);
-        duplicateBullet.transform.SetParent (transform);
+        duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * globalVariables.bulletForce);
 		duplicateBullet.gameObject.name = "Bullet"+Time.time;
+        duplicateBullet.GetComponent<BulletScript>().shotOwner = gameObject; 
+
     }
 
     private void Rotate(float z)
@@ -174,7 +171,7 @@ public class BotScript : MonoBehaviour
 
 		if(validateRotate)
 		{
-			transform.rotation *= Quaternion.Euler(0, 0, rotationSpeed * z);
+			transform.rotation *= Quaternion.Euler(0, 0, globalVariables.rotationSpeed * z);
 		}
     }
 
@@ -247,7 +244,7 @@ public class BotScript : MonoBehaviour
         bullet.position = collider.transform.position;
         bullet.velocity = collider.GetComponent <Rigidbody2D>().velocity;
         bullet.force = collider.GetComponent<Rigidbody2D>().totalForce;
-        var parent = collider.transform.parent.transform.gameObject;
+        var parent = collider.GetComponent<BulletScript>().shotOwner;
         bullet.firedBy = MapColliderToPlayer(parent);
 
         return bullet;
