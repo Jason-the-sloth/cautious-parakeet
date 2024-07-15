@@ -1,6 +1,5 @@
 ﻿namespace Control.Models
 {
-    [Serializable]
     public class Obstacle
     {
         public SimpleVector Position { get; set; }

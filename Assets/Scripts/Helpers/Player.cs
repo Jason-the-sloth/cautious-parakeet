@@ -1,4 +1,4 @@
-﻿namespace Control.Models
+﻿namespace Helpers
 {
     public class Player
     {

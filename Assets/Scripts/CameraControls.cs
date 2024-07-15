@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CameraControls : MonoBehaviour
@@ -11,7 +8,6 @@ public class CameraControls : MonoBehaviour
     void Start()
     {
         globalVariables = Resources.Load<GlobalVariables>("GlobalVariables");
-
     }
 
     // Update is called once per frame

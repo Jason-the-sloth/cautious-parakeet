@@ -1,19 +1,18 @@
-using System.Collections.Generic;
+using Helpers;
 using UnityEngine;
-
 
 public class HumanPlayer : IBotScript
 {
     public BotCommands GetCommands(BotInput botinput)
     {
-        BotCommands botCommands = new(Move(), Rotate(), Shoot());
+        BotCommands botCommands = new(new(Move()), Rotate(), Shoot());
 
         return botCommands;
     }
 
     Vector2 Move()
     {
-// Initialize movement direction
+        // Initialize movement direction
         Vector2 moveDirection = Vector2.zero;
 
         // Check for each arrow key and adjust the move direction accordingly
@@ -34,9 +33,7 @@ public class HumanPlayer : IBotScript
             moveDirection += Vector2.right;
         }
 
-
         return moveDirection;
-        
     }
 
     float Rotate()
@@ -58,6 +55,5 @@ public class HumanPlayer : IBotScript
     bool Shoot()
     {
         return Input.GetKey(KeyCode.Space);
-
     }
 }

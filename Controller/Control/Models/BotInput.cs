@@ -1,12 +1,11 @@
 ﻿namespace Control.Models
 {
-    [Serializable]
     public class BotInput
     {
-        public Player? Player;
-        public List<Player> OtherPlayers = new List<Player>();
-        public List<Bullet> Bullets = new List<Bullet>();
-        public List<Obstacle> Obstacles = new List<Obstacle>();
-        public List<Border> Borders = new List<Border>();
+        public Player Player { get; internal set; }
+        public List<Player> OtherPlayers { get; internal set; }
+        public List<Bullet> Bullets { get; internal set; }
+        public List<Obstacle> Obstacles { get; internal set; }
+        public List<Border> Borders { get; internal set; }
     }
 }
