@@ -8,6 +8,7 @@ TagManager:
   - border
   - player
   - bullet
+  - healthbar
   layers:
   - Default
   - TransparentFX
