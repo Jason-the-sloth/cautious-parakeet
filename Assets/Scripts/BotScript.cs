@@ -6,8 +6,10 @@ using System.Runtime.Serialization.Json;
 using System.Text;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using static UnityEditor.Progress;
 using static UnityEngine.GraphicsBuffer;
 
@@ -15,16 +17,17 @@ public class BotScript : MonoBehaviour
 {
     public GlobalVariables globalVariables;
 
-   
 
-	//Game Objects
+
+    //Game Objects
+    
     private GameObject bullets;
 	public IBotScript botScript = new HumanPlayer();
-
+    public float health;
 
 	//Internal Variables
     private float lastFired;
-
+    private Slider healthSlider;
 
 	public void SetBotScript(IBotScript botScript)
 	{
@@ -39,26 +42,41 @@ public class BotScript : MonoBehaviour
         botScript ??= new HumanPlayer();
 		bullets = GameObject.Find("Bullets");
 
+        healthSlider = GetComponentInChildren<Slider>();
+        health = globalVariables.maxHealth;
+        UpdateHealthBar(health);
+        
         CreateArcAndCircle();
     }
+
+
 
     // Update is called once per frame
     private void Update()
     {
-		
-
-		BotCommands botCommands = botScript.GetCommands(CheckConeCollision());
 
 
-		Move(botCommands.GetMove());
+        BotCommands botCommands = botScript.GetCommands(CheckConeCollision());
+
+
+        Move(botCommands.GetMove());
         Rotate(botCommands.GetRotate());
         Shoot(botCommands.GetShoot());
+
     }
 
-    private void CreateArcAndCircle()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
 
-
+        if (collision != null) {
+            if (collision.gameObject.CompareTag("bullet"))
+            {
+                TakeDamage(collision.relativeVelocity.magnitude);
+            }
+        }
+    }
+    private void CreateArcAndCircle()
+    {
 
         //drawing the arc
         Transform circle = transform.Find("CollisionCircle");
@@ -139,7 +157,6 @@ public class BotScript : MonoBehaviour
         return json;
        
     }
-
 
     private void Shoot(bool shoot)
     {
@@ -222,7 +239,22 @@ public class BotScript : MonoBehaviour
 	{
 		return value<=1 && value >= -1;
 	}
+    void TakeDamage(float velocity)
+    {
+        float damage = globalVariables.bulletDamage + Mathf.Clamp(velocity * globalVariables.bulletCoefficientDamage, 0.0f, health - globalVariables.bulletDamage);
+        health -= damage;
+        UpdateHealthBar(health);
+        if(health <= 0)
+        {
+            //death implementation or triiger game over event.
+            SceneManager.LoadScene("Base");
+        }
 
+    } 
+    public void UpdateHealthBar(float value)
+    {
+        healthSlider.value = value/globalVariables.maxHealth;
+    }
     BotInput.Player MapColliderToPlayer(GameObject gameObject)
     {
 
