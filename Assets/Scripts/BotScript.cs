@@ -1,5 +1,10 @@
 using Helpers;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using static UnityEditor.Progress;
+using static UnityEngine.GraphicsBuffer;
 
 public class BotScript : MonoBehaviour
 {
@@ -7,8 +12,9 @@ public class BotScript : MonoBehaviour
     //Game Objects
     private GameObject bullets;
     public IBotScript botScript = new HumanPlayer();
-    //Internal Variables
+    public float health;
     private float lastFired;
+    private Slider healthSlider;
 
     public void SetBotScript(IBotScript botScript)
     {
@@ -22,19 +28,35 @@ public class BotScript : MonoBehaviour
         botScript ??= new HumanPlayer();
         bullets = GameObject.Find("Bullets");
 
+        healthSlider = GetComponentInChildren<Slider>();
+        health = globalVariables.maxHealth;
+        UpdateHealthBar(health);
+        
         CreateArcAndCircle();
     }
+
+
 
     // Update is called once per frame
     private void Update()
     {
         BotCommands botCommands = botScript.GetCommands(CheckConeCollision());
-
         Move(botCommands.Move.ToVector2());
         Rotate(botCommands.Rotate);
         Shoot(botCommands.Shoot);
+
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        if (collision != null) {
+            if (collision.gameObject.CompareTag("bullet"))
+            {
+                TakeDamage(collision.relativeVelocity.magnitude);
+            }
+        }
+    }
     private void CreateArcAndCircle()
     {
         //drawing the arc
@@ -198,8 +220,24 @@ public class BotScript : MonoBehaviour
             Color = gameObject.GetComponent<Renderer>().material.color.ToString(),// possibly return as RGBA
         };
     }
+    void TakeDamage(float velocity)
+    {
+        float damage = globalVariables.bulletDamage + Mathf.Clamp(velocity * globalVariables.bulletCoefficientDamage, 0.0f, health - globalVariables.bulletDamage);
+        health -= damage;
+        UpdateHealthBar(health);
+        if(health <= 0)
+        {
+            //death implementation or triiger game over event.
+            SceneManager.LoadScene("Base");
+        }
 
     private Border MapColliderToBorder(Collider2D collider)
+    } 
+    public void UpdateHealthBar(float value)
+    {
+        healthSlider.value = value/globalVariables.maxHealth;
+    }
+    BotInput.Player MapColliderToPlayer(GameObject gameObject)
     {
         return new()
         {

@@ -13,6 +13,7 @@ public class GlobalVariables : ScriptableObject
     public float bulletForce = 300f;
     public float viewRadius = 6f;
     public  float viewAngle = 90f;
+    public float maxHealth = 10f;
     public GameObject bullet;
 
     [Space(10)]
@@ -26,6 +27,8 @@ public class GlobalVariables : ScriptableObject
     [Header("Bullet Prefab Set Up")]
     [Space(10)]
     public float deathCount = 1000;
+    public float bulletDamage = 1f;
+    public float bulletCoefficientDamage = 1f;
 
     [Space(10)]
     [Header("Board Set UP")]
