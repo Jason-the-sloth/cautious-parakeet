@@ -19,12 +19,13 @@ MonoBehaviour:
   viewRadius: 5
   viewAngle: 100
   maxHealth: 100
-  bullet: {fileID: 1819433039985643459, guid: 898773ac5a051684d8ec92d804b02883, type: 3}
-  playerTriangle: {fileID: 1365801135860132522, guid: e178171a9c7b82343bd19507aae05c85, type: 3}
+  bullet: {fileID: 1819433039985643459, guid: 72db5f91fe1764a499e252307fbb3ca8, type: 3}
+  playerTriangle: {fileID: 1365801135860132522, guid: dced355175f14d841b4e1c356e5266d2, type: 3}
   p1: {x: 0, y: 0}
   p2: {x: 0, y: 0}
   deathCount: 970.3612
   bulletDamage: 1
+  bulletCoefficientDamage: 1
   Width: 10
   Height: 10
   rectangleWidth: 10

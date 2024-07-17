@@ -21,7 +21,6 @@ public class PlayerSetUpScript : MonoBehaviour
 			float randomX = UnityEngine.Random.Range(-1 * globalVariables.Width, globalVariables.Width);
 			float randomY = UnityEngine.Random.Range(-1 * (globalVariables.Height - 2), (globalVariables.Height - 2));
 
-
 			CreatePlayer(new Vector2(randomX, randomY), bot.Key, bot.Value);
 		}
 	}
