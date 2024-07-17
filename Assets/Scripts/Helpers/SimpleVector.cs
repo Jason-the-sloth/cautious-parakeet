@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Helpers
 {
+    [Serializable]
     public class SimpleVector
     {
         public float X;
@@ -46,6 +47,8 @@ namespace Helpers
             var value = a.ToVector2() / b.ToVector2();
             return new SimpleVector(value.x + value.x, value.y + value.y);
         }
+
+        public SimpleVector(){}
 
         public SimpleVector(float x, float y)
         {

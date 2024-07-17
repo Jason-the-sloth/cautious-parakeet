@@ -20,7 +20,7 @@ namespace Control.Controllers
         [HttpPost(Name = "Process")]
         public async Task<BotCommands> Post(BotInput botInput)
         {
-            return await new Task<BotCommands>(() => _botService.GetCommands(botInput));
+            return await _botService.GetCommands(botInput);
         }
     }
 }

@@ -12,11 +12,11 @@ namespace Control.Services
             _logger = logger;
         }
 
-        public BotCommands GetCommands(BotInput botInput)
+        public Task<BotCommands> GetCommands(BotInput botInput)
         {
             if (botInput?.Player == null)
             {
-                return new BotCommands();
+                return Task.Run(() => new BotCommands());
             }
 
             //if found the enemy player shoot at and try to maintain distance
@@ -27,7 +27,7 @@ namespace Control.Services
             return SearchForEnemy(botInput.Player, botInput.Borders);
         }
 
-        private BotCommands SearchForEnemy(Player player, List<Border> borders)
+        private Task<BotCommands> SearchForEnemy(Player player, List<Border> borders)
         {
             if (borders != null && borders.Count > 0)
             {
@@ -42,13 +42,13 @@ namespace Control.Services
                 {
                     rotate = -1f;
                 }
-                return new(SimpleVector.Up, rotate, false);
+                return Task.Run(() => new BotCommands(SimpleVector.Up, rotate, false));
             }
             //fly straight
-            return new(SimpleVector.Up, 0f, false);
+            return Task.Run(() => new BotCommands(SimpleVector.Up, 0f, false));
         }
 
-        private BotCommands FoundEnemy(Player player, Player enemy)
+        private Task<BotCommands> FoundEnemy(Player player, Player enemy)
         {
             SimpleVector move = SimpleVector.Zero;
             float rotate = 0f;
@@ -78,7 +78,7 @@ namespace Control.Services
             {
                 move = SimpleVector.Down;
             }
-            return new BotCommands(move, rotate, shoot);
+            return Task.Run(() => new BotCommands(move, rotate, shoot));
         }
     }
 }

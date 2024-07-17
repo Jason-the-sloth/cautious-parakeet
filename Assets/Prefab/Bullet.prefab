@@ -152,7 +152,7 @@ Rigidbody2D:
   m_LinearDrag: 0.5
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 6200000, guid: 9672610d4fe12cf4fb3f9b3f64ba1d1f, type: 2}
+  m_Material: {fileID: 6200000, guid: f3bd763252098b744ae125d36e49c943, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -175,4 +175,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da68351c6a50d7742891d75743632bcf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathCount: 1000
+  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
+  shotOwner: {fileID: 1365801135860132522, guid: dced355175f14d841b4e1c356e5266d2, type: 3}

@@ -106,7 +106,7 @@ public class BotScript : MonoBehaviour
                 }
             }
         }
-
+        Debug.Log(botInput.Player.Color.ToString());
         return botInput;
     }
 

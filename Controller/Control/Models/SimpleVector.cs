@@ -4,8 +4,8 @@ namespace Control.Models
 {
     public class SimpleVector
     {
-        public float X;
-        public float Y;
+        public float X { get; set; }
+        public float Y { get; set; }
         public float SqrMagnitude => (X * X + Y * Y);
 
         public static SimpleVector Zero => new(0f, 0f);

@@ -2,7 +2,7 @@
 {
     public class BotCommands
     {
-        public SimpleVector Move { get; private set; }
+        public SimpleVector? Move { get; private set; }
 
         public float Rotate { get; private set; }
 

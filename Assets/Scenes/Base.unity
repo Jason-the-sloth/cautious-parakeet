@@ -198,9 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f123aaf1d39b6a438be1d64f4225b31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTriangle: {fileID: 1365801135860132522, guid: dced355175f14d841b4e1c356e5266d2, type: 3}
-  p1: {x: 3, y: -3}
-  p2: {x: -3, y: 3}
+  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
 --- !u!1 &1073633554
 GameObject:
   m_ObjectHideFlags: 0
@@ -230,8 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb51f8fa33997c0478c180f80ccc0574, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rectangleWidth: 10
-  rectangleHeight: 10
+  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
 --- !u!4 &1073633556
 Transform:
   m_ObjectHideFlags: 0
@@ -548,7 +545,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0026f36484f3ab478d7202198e6a8fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
+  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
 --- !u!1 &1737791253
 GameObject:
   m_ObjectHideFlags: 0

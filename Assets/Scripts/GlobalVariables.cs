@@ -5,16 +5,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName =nameof(GlobalVariables),menuName =nameof(GlobalVariables))]
 public class GlobalVariables : ScriptableObject
 {
-
-
     [Header("Player Prefab Set Up")]
     [Space(10)]
     public float moveSpeed = 10.0f;
     public float rotationSpeed = 0.5f;
     public float shootingInterval = 1f;
     public float bulletForce = 300f;
-    public float viewRadius;
-    public  float viewAngle;
+    public float viewRadius = 6f;
+    public  float viewAngle = 90f;
     public GameObject bullet;
 
     [Space(10)]

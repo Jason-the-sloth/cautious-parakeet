@@ -9,21 +9,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4d0855475c9135c42b0142158c2095e3, type: 3}
+  m_Script: {fileID: 11500000, guid: 1a86f9676f6adad45b05a95157021ed2, type: 3}
   m_Name: GlobalVariables
   m_EditorClassIdentifier: 
-  rectangleWidth: 10
-  rectangleHeight: 10
   moveSpeed: 10
   rotationSpeed: 0.5
-  shootingInterval: 2
-  bulletForce: 200
-  viewRadius: 5
-  viewAngle: 100
-  playerTriangle: {fileID: 1365801135860132522, guid: e178171a9c7b82343bd19507aae05c85, type: 3}
-  p1: {x: 0, y: 0}
-  p2: {x: 0, y: 0}
-  deathCount: 974.9148
+  shootingInterval: 1
+  bulletForce: 300
+  viewRadius: 6
+  viewAngle: 90
+  bullet: {fileID: 1819433039985643459, guid: 72db5f91fe1764a499e252307fbb3ca8, type: 3}
+  playerTriangle: {fileID: 1365801135860132522, guid: dced355175f14d841b4e1c356e5266d2, type: 3}
+  p1: {x: 3, y: -3}
+  p2: {x: -3, y: 3}
+  deathCount: 1000
   Width: 10
   Height: 10
-  bullet: {fileID: 1819433039985643459, guid: 898773ac5a051684d8ec92d804b02883, type: 3}
+  rectangleWidth: 10
+  rectangleHeight: 10
+  cameraMoveSpeed: 10

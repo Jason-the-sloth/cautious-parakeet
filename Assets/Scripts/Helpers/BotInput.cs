@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Helpers
 {
+    [Serializable]
     public class BotInput
     {
-        public Player Player { get; internal set; }
-        public List<Player> OtherPlayers { get; internal set; }
-        public List<Bullet> Bullets { get; internal set; }
-        public List<Obstacle> Obstacles { get; internal set; }
-        public List<Border> Borders { get; internal set; }
+        public Player Player = new();
+        public List<Player> OtherPlayers = new();
+        public List<Bullet> Bullets = new();
+        public List<Obstacle> Obstacles = new();
+        public List<Border> Borders = new();
     }
 }

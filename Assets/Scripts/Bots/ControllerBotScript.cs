@@ -1,7 +1,10 @@
 using System;
-using System.Collections.Generic;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Helpers;
+using Unity.Serialization.Json;
+using UnityEngine;
 
 public class ControllerBotScript : IBotScript
 {
@@ -12,28 +15,23 @@ public class ControllerBotScript : IBotScript
 
     public ControllerBotScript() { }
 
-    public BotCommands GetCommands(BotInput botinput)
+    public BotCommands GetCommands(BotInput botInput)
     {
-        var colliders = new List<Collider2D>();
-        BotCommands botCommands = new();
+        var jsonString = JsonSerialization.ToJson(botInput);
+        Debug.Log($"Controller: {jsonString}");
+        using StringContent jsonContent = new(jsonString, Encoding.UTF8, "application/json");
 
-        return botCommands;
-    }
+        using HttpResponseMessage response = Task.Run(() => httpClient.PostAsync("bot", jsonContent)).GetAwaiter().GetResult();
 
-    private static async Task<BotCommands> PostAsync(HttpClient httpClient, BotInput botInput)
-    {
-        using StringContent jsonContent = new(
-            JsonUtility.ToJson(botInput),
-        Encoding.UTF8,
-        "application/json");
-
-        using HttpResponseMessage response = await httpClient.PostAsync(
-            "bot",
-            jsonContent);
-
-        response.EnsureSuccessStatusCode();
-
-        var jsonResponse = await response.Content.ReadAsStringAsync();
-        return JsonUtility.FromJson<BotCommands>(jsonResponse);
+        if (response.IsSuccessStatusCode)
+        {
+            var jsonResponse = Task.Run(() => response.Content.ReadAsStringAsync()).GetAwaiter().GetResult();
+            return JsonSerialization.FromJson<BotCommands>(jsonResponse);
+        }
+        else
+        {
+            Debug.Log(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+        }
+        return new BotCommands();
     }
 }

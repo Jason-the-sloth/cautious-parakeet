@@ -1,9 +1,12 @@
-﻿namespace Helpers
+﻿using System;
+
+namespace Helpers
 {
+    [Serializable]
     public class Border
     {
-        public SimpleVector Position { get; set; }
-        public float Width { get; set; }
-        public float Height { get; set; }
+        public SimpleVector Position = new();
+        public float Width = new();
+        public float Height = new();
     }
 }
