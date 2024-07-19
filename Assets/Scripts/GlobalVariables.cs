@@ -17,6 +17,7 @@ public class GlobalVariables : ScriptableObject
     public  float viewAngle;
     public float maxHealth = 10f;
     public GameObject bullet;
+    public GameObject stats;
 
     [Space(10)]
     [Header("Player Set Up")]
