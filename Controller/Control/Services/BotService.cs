@@ -20,7 +20,7 @@ namespace Control.Services
             }
 
             //if found the enemy player shoot at and try to maintain distance
-            if (botInput.OtherPlayers != null)
+            if (botInput.OtherPlayers != null && botInput.OtherPlayers?.Count > 0)
             {
                 return FoundEnemy(botInput.Player, botInput.OtherPlayers[0]);
             }

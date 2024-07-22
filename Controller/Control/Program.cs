@@ -17,6 +17,7 @@ namespace Control
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<IBotService, BotService>();
+            builder.Services.AddScoped<ICaptureService, CaptureService>();
 
             var app = builder.Build();
 

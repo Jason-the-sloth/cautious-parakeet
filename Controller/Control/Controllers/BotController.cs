@@ -1,6 +1,7 @@
 using Control.Models;
 using Control.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Control.Controllers
 {
@@ -18,8 +19,9 @@ namespace Control.Controllers
         }
 
         [HttpPost(Name = "Process")]
-        public async Task<BotCommands> Post(BotInput botInput)
+        public async Task<BotCommands> Post([FromBody] BotInput botInput)
         {
+            _logger.LogInformation("{botInput}", JsonSerializer.Serialize(botInput));
             return await _botService.GetCommands(botInput);
         }
     }

@@ -11,9 +11,6 @@ public class BasicBotScript : IBotScript
 
     public BotCommands GetCommands(BotInput botInput)
     {
-        var jsonString = JsonSerialization.ToJson(botInput);
-        Debug.Log($"BasicBot: {jsonString}");
-
         //if found the enemy player shoot at and try to maintain distance
         if (botInput?.OtherPlayers.FirstOrDefault() != null)
         {

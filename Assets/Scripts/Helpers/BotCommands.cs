@@ -1,12 +1,13 @@
-﻿namespace Helpers
+﻿using System;
+
+namespace Helpers
 {
+    [Serializable]
     public class BotCommands
     {
-        public SimpleVector Move { get; private set; }
-
-        public float Rotate { get; private set; }
-
-        public bool Shoot { get; private set; }
+        public SimpleVector Move;
+        public float Rotate;
+        public bool Shoot;
 
         public BotCommands()
         {

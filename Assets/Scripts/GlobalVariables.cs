@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.VersionControl;
@@ -43,4 +44,5 @@ public class GlobalVariables : ScriptableObject
     [Header("Camera Controls Set UP")]
     public float cameraMoveSpeed = 10.0f;
 
+    public static Uri BaseAddress = new Uri("https://localhost:7201");
 }
