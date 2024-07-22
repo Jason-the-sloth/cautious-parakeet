@@ -9,6 +9,7 @@ public class PlayerSetUpScript : MonoBehaviour
     //public Vector2 p1;
     //public Vector2 p2;
     public GlobalVariables globalVariables;
+	private int numberOfTeams = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class PlayerSetUpScript : MonoBehaviour
 
         foreach (var bot in SharedData.Bots)
 		{
-
+			numberOfTeams++;
 			float randomX = UnityEngine.Random.Range(-1 * globalVariables.Width, globalVariables.Width);
 			float randomY = UnityEngine.Random.Range(-1 * (globalVariables.Height - 2), (globalVariables.Height - 2));
 
@@ -31,9 +32,11 @@ public class PlayerSetUpScript : MonoBehaviour
 		player.transform.Rotate(new Vector3(0, 0, 180 - Vector2.SignedAngle(vec, Vector2.up)));
 		player.name = name;
 		player.transform.SetParent(transform);
-		player.GetComponent<Renderer>().material.color = UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+		player.GetComponent<Renderer>().material.color = SharedData.TeamColors[numberOfTeams - 1];
         player.GetComponent<BotScript>().SetBotScript(botScript);
-	}
+		player.GetComponent<BotScript>().team = $"Team{numberOfTeams}";
+        player.GetComponent<BotScript>().teamColor = SharedData.TeamColors[numberOfTeams-1];
+    }
 
 	// Update is called once per frame
 	void Update()

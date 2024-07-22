@@ -19,6 +19,7 @@ public class BotScript : MonoBehaviour
     public GlobalVariables globalVariables;
 
     //Game Objects
+    private GameObject botStats;
     private GameObject bullets;
 	public IBotScript botScript = new HumanPlayer();
     public float health;
@@ -27,7 +28,9 @@ public class BotScript : MonoBehaviour
     private float lastFired;
     private Slider healthSlider;
 
-	public void SetBotScript(IBotScript botScript)
+    public string team;
+    public Color teamColor;
+    public void SetBotScript(IBotScript botScript)
 	{
 		this.botScript = botScript;
 	}
@@ -38,13 +41,23 @@ public class BotScript : MonoBehaviour
         globalVariables = Resources.Load<GlobalVariables>("GlobalVariables");
         botScript ??= new HumanPlayer();
 		bullets = GameObject.Find("Bullets");
-
         healthSlider = GetComponentInChildren<Slider>();
         health = globalVariables.maxHealth;
         UpdateHealthBar(health);
         
         CreateArcAndCircle();
+        InitializeBotStats();
     }
+    void InitializeBotStats()
+    {
+        botStats = Instantiate(globalVariables.stats);
+        botStats.transform.Find("PlayerName").GetComponent<Text>().text = gameObject.name;
+        botStats.GetComponent<BotStatsScript>().textColor = teamColor;
+        var _team = GameObject.Find(team);
+        botStats.transform.SetParent(_team.transform,false);
+
+    }
+
 
     // Update is called once per frame
     private void Update()
@@ -54,6 +67,19 @@ public class BotScript : MonoBehaviour
         Move(botCommands.Move.ToVector2());
         Rotate(botCommands.Rotate);
         Shoot(botCommands.Shoot);
+        UpdateScore();
+    }
+
+    private void UpdateScore()
+    {
+        if (team == "Team1")
+        {
+            botStats.GetComponent<BotStatsScript>().addScore(SharedData.TeamOneScore);
+        }
+        else
+        {
+            botStats.GetComponent<BotStatsScript>().addScore(SharedData.TeamTwoScore);
+        }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -61,6 +87,17 @@ public class BotScript : MonoBehaviour
         if (collision != null) {
             if (collision.gameObject.CompareTag("bullet"))
             {
+                switch (team)
+                {
+                    case "Team1":
+                        SharedData.TeamTwoScore++;
+                        break;
+                    default:
+                        SharedData.TeamOneScore++;
+                        break;
+
+                }      
+
                 TakeDamage(collision.relativeVelocity.magnitude);
             }
         }
@@ -153,8 +190,10 @@ public class BotScript : MonoBehaviour
             lastFired = globalVariables.shootingInterval;
 
             CreateBullet();
+            botStats.GetComponent<BotStatsScript>().addBulletsFired();
+
         }
-		else if(shoot)
+        else if(shoot)
 		{
 			Debug.Log("Shooting is on cooldown");
 		}
@@ -225,7 +264,10 @@ public class BotScript : MonoBehaviour
         float damage = globalVariables.bulletDamage + Mathf.Clamp(velocity * globalVariables.bulletCoefficientDamage, 0.0f, health - globalVariables.bulletDamage);
         health -= damage;
         UpdateHealthBar(health);
-        if(health <= 0)
+        botStats.GetComponent<BotStatsScript>().updateHealth(health);
+        botStats.GetComponent<BotStatsScript>().addHits();
+
+        if (health <= 0)
         {
             //death implementation or trigger game over event.
             SceneManager.LoadScene("Base");
