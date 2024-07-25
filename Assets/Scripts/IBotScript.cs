@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using UnityEngine;
+using Helpers;
 
 public interface IBotScript
 {
-	public BotCommands GetCommands(string botinput);
+    public BotCommands GetCommands(BotInput botinput);
 }

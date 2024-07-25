@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using Helpers;
 using Unity.Burst.CompilerServices;
 using Unity.VisualScripting;
 using UnityEditor;
@@ -16,8 +17,6 @@ using static UnityEngine.GraphicsBuffer;
 public class BotScript : MonoBehaviour
 {
     public GlobalVariables globalVariables;
-
-
 
     //Game Objects
     private GameObject botStats;
@@ -35,7 +34,6 @@ public class BotScript : MonoBehaviour
 	{
 		this.botScript = botScript;
 	}
-
 
     // Start is called before the first frame update
     private void Start()
@@ -64,14 +62,11 @@ public class BotScript : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-
-
         BotCommands botCommands = botScript.GetCommands(CheckConeCollision());
 
-
-        Move(botCommands.GetMove());
-        Rotate(botCommands.GetRotate());
-        Shoot(botCommands.GetShoot());
+        Move(botCommands.Move.ToVector2());
+        Rotate(botCommands.Rotate);
+        Shoot(botCommands.Shoot);
         UpdateScore();
     }
 
@@ -89,7 +84,6 @@ public class BotScript : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-
         if (collision != null) {
             if (collision.gameObject.CompareTag("bullet"))
             {
@@ -108,9 +102,9 @@ public class BotScript : MonoBehaviour
             }
         }
     }
+
     private void CreateArcAndCircle()
     {
-
         //drawing the arc
         Transform circle = transform.Find("CollisionCircle");
         Transform arc1 = transform.Find("CollisionLine1");
@@ -125,10 +119,9 @@ public class BotScript : MonoBehaviour
         arc2.localScale = new Vector3(0.01f, globalVariables.viewRadius);
         arc2.Rotate(new Vector3(0, 0, -globalVariables.viewAngle /2));
         arc2.position += arc2.up * (globalVariables.viewRadius / 2);
-
     }
 
-    private string CheckConeCollision ()
+    private BotInput CheckConeCollision ()
 	{
         Collider2D[] raycastHits = Physics2D.OverlapCircleAll(transform.position, globalVariables.viewRadius);
         BotInput botInput = new();
@@ -158,44 +151,39 @@ public class BotScript : MonoBehaviour
 
                 if (isSeen)
                 {
-
                     if (raycastHit.CompareTag("bullet"))
                     {
-                        botInput.bullets.Add(MapColliderToBullet(raycastHit));
+                        botInput.Bullets.Add(MapColliderToBullet(raycastHit));
                     }
                     else if (raycastHit.CompareTag("obstacle"))
                     {
-                        botInput.obstacles.Add(MapColliderTObstacle(raycastHit));
+                        botInput.Obstacles.Add(MapColliderTObstacle(raycastHit));
                     }
                     else if (raycastHit.CompareTag("border"))
                     {
-                        botInput.borders.Add(MapColliderToBorder(raycastHit));
+                        botInput.Borders.Add(MapColliderToBorder(raycastHit));
                     }
                     else if (raycastHit.transform == transform)
                     {
-                        botInput.player = MapColliderToPlayer(raycastHit.gameObject);
+                        botInput.Player = MapColliderToPlayer(raycastHit.gameObject);
                     }
                     else
                     {
-                        botInput.otherPlayers.Add(MapColliderToPlayer(raycastHit.gameObject));
+                        botInput.OtherPlayers.Add(MapColliderToPlayer(raycastHit.gameObject));
                     }
                 }
             }
         }
 
-
-
-        string json = JsonUtility.ToJson(botInput,true);
-
-        return json;
-       
+        return botInput;
     }
 
     private void Shoot(bool shoot)
     {
-
         if(lastFired >= 0)
+        {
             lastFired -= Time.deltaTime;
+        }
     
         if (shoot && (lastFired < 0f))
         {
@@ -209,7 +197,6 @@ public class BotScript : MonoBehaviour
 		{
 			Debug.Log("Shooting is on cooldown");
 		}
-        
     }
 
     private void CreateBullet()
@@ -221,7 +208,6 @@ public class BotScript : MonoBehaviour
         duplicateBullet.transform.GetComponent<Rigidbody2D>().AddRelativeForce(Vector2.right * globalVariables.bulletForce);
 		duplicateBullet.gameObject.name = "Bullet"+Time.time;
         duplicateBullet.GetComponent<BulletScript>().shotOwner = gameObject; 
-
     }
 
     private void Rotate(float z)
@@ -266,13 +252,13 @@ public class BotScript : MonoBehaviour
 			return false;
 		}
 		return true;
-
 	}
 
 	private bool BetweenOne(float value)
 	{
 		return value<=1 && value >= -1;
 	}
+    
     void TakeDamage(float velocity)
     {
         float damage = globalVariables.bulletDamage + Mathf.Clamp(velocity * globalVariables.bulletCoefficientDamage, 0.0f, health - globalVariables.bulletDamage);
@@ -283,58 +269,56 @@ public class BotScript : MonoBehaviour
 
         if (health <= 0)
         {
-            //death implementation or triiger game over event.
+            //death implementation or trigger game over event.
             SceneManager.LoadScene("Base");
         }
-
     } 
+
     public void UpdateHealthBar(float value)
     {
         healthSlider.value = value/globalVariables.maxHealth;
     }
-    BotInput.Player MapColliderToPlayer(GameObject gameObject)
+
+    private Player MapColliderToPlayer(GameObject gameObject)
     {
-
-
-        BotInput.Player player = new();
-        player.position = gameObject.transform.position;
-        player.rotation = gameObject.transform.rotation;
-        player.velocity = gameObject.GetComponent<Rigidbody2D>().velocity;
-        player.color = gameObject.GetComponent<Renderer>().material.color;
-
-        return player;
-       
+        return new()
+        {
+            Position = new(gameObject.transform.position),
+            Rotation = gameObject.transform.rotation.z,
+            Velocity = new(gameObject.GetComponent<Rigidbody2D>().velocity),
+            Color = gameObject.GetComponent<Renderer>().material.color.ToHexString()
+        };
     }
-    BotInput.Border MapColliderToBorder(Collider2D collider)
-    {
-        BotInput.Border border = new BotInput.Border();
-        border.position = collider.transform.position;
-        border.width = collider.GetComponent<Renderer>().bounds.size.x;
-        border.height = collider.GetComponent<Renderer>().bounds.size.y;
 
-        return border;
+    private Border MapColliderToBorder(Collider2D collider)
+    {
+        return new()
+        {
+            Position = new(collider.transform.position),
+            Width = collider.GetComponent<Renderer>().bounds.size.x,
+            Height = collider.GetComponent<Renderer>().bounds.size.y
+        };
     }
-    BotInput.Bullet MapColliderToBullet(Collider2D collider)
+
+    private Bullet MapColliderToBullet(Collider2D collider)
     {
-
-        BotInput.Bullet bullet = new ();
-        bullet.position = collider.transform.position;
-        bullet.velocity = collider.GetComponent <Rigidbody2D>().velocity;
-        bullet.force = collider.GetComponent<Rigidbody2D>().totalForce;
-        var parent = collider.GetComponent<BulletScript>().shotOwner;
-        bullet.firedBy = MapColliderToPlayer(parent);
-
-        return bullet;
-
+        return new ()
+        {
+            Position = new(collider.transform.position),
+            Velocity = new(collider.GetComponent <Rigidbody2D>().velocity),
+            Force = new(collider.GetComponent<Rigidbody2D>().totalForce),
+            FiredBy = MapColliderToPlayer(collider.GetComponent<BulletScript>().shotOwner)
+        };
     }
-    BotInput.Obstacle MapColliderTObstacle(Collider2D collider)
+
+    private Obstacle MapColliderTObstacle(Collider2D collider)
     {
 
-        BotInput.Obstacle obstacle = new ();
-        obstacle.position = collider.transform.position;
-        obstacle.velocity = collider.GetComponent<Rigidbody2D>().velocity;
-        obstacle.radius = collider.GetComponent<CircleCollider2D>().radius;
-
-        return obstacle;
+        return new ()
+        {
+            Position = new(collider.transform.position),
+            Velocity = new(collider.GetComponent<Rigidbody2D>().velocity),
+            Radius = collider.GetComponent<CircleCollider2D>().radius
+        };
     }
 }
