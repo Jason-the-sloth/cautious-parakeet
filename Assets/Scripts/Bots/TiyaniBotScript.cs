@@ -1,14 +1,7 @@
-using System;
+using Helpers;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
-using Unity.Mathematics;
-using Unity.Collections.LowLevel.Unsafe;
-using UnityEditor;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-using UnityEngine.EventSystems;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
+using UnityEngine;
 
 public class TiyaniBotScript : IBotScript
 {
@@ -21,7 +14,7 @@ public class TiyaniBotScript : IBotScript
 
     public TiyaniBotScript() { }
 
-    public BotCommands GetCommands(string botinput)
+    public BotCommands GetCommands(BotInput botInput)
     {
         var movement = Vector2.zero;
         var gameObjects = new List<Collider2D>();
@@ -35,15 +28,15 @@ public class TiyaniBotScript : IBotScript
         var enemies = gameObjects.Where(obj => obj.name != nameof(TiyaniBotScript) && obj.CompareTag("player")).ToList();
         var borders = gameObjects.Where(obj => obj.CompareTag("border")).ToList();
 
-        ObjectType action = GetAction(bullets,enemies,borders);
+        ObjectType action = GetAction(bullets, enemies, borders);
 
         switch (action)
         {
             case ObjectType.ENEMY:
-                shoot = SameLine(enemies.FirstOrDefault(),Vector2.left, player.transform.position);
-                rotation = DetermineRotation(enemies.FirstOrDefault().transform.position, player.transform.position ); // Rotate towards enemy
+                shoot = SameLine(enemies.FirstOrDefault(), Vector2.left, player.transform.position);
+                rotation = DetermineRotation(enemies.FirstOrDefault().transform.position, player.transform.position); // Rotate towards enemy
                 movement = Vector2.zero; // Stop movement
-                Debug.Log($"action : {ObjectType.ENEMY} : {rotation}" );
+                Debug.Log($"action : {ObjectType.ENEMY} : {rotation}");
 
                 break;
             case ObjectType.OBSTACLE:
@@ -53,11 +46,11 @@ public class TiyaniBotScript : IBotScript
                 //Debug.Log($"action : {ObjectType.OBSTACLE}");
 
                 break;
-            case ObjectType.BULLET :
-                    //shoot = false;
-                    //rotation = 0f;
-                    //movement = Vector2.zero; // Stop movement or adjust based on bullet impact
-                    //Debug.Log($"action : {ObjectType.BULLET}");
+            case ObjectType.BULLET:
+                //shoot = false;
+                //rotation = 0f;
+                //movement = Vector2.zero; // Stop movement or adjust based on bullet impact
+                //Debug.Log($"action : {ObjectType.BULLET}");
                 break;
             case ObjectType.NOTHING:
                 //shoot = false;
@@ -68,14 +61,14 @@ public class TiyaniBotScript : IBotScript
                 break;
         }
 
-        BotCommands botCommands = new(movement, rotation, shoot);
+        BotCommands botCommands = new(new(movement), rotation, shoot);
 
         return botCommands;
     }
 
-    private ObjectType GetAction(List<Collider2D> bullets, List<Collider2D> enemies , List<Collider2D> borders)
+    private ObjectType GetAction(List<Collider2D> bullets, List<Collider2D> enemies, List<Collider2D> borders)
     {
-   
+
         if (bullets.Any())
         {
             return ObjectType.BULLET;
@@ -91,7 +84,7 @@ public class TiyaniBotScript : IBotScript
 
         return ObjectType.NOTHING;
     }
-    private float DetermineRotation(Vector3 targetPosition , Vector3 playerPosition)
+    private float DetermineRotation(Vector3 targetPosition, Vector3 playerPosition)
     {
         float rotate = 0f;
         float angle = Vector2.SignedAngle(Vector3.zero - playerPosition, Vector3.up);
@@ -110,10 +103,10 @@ public class TiyaniBotScript : IBotScript
 
     private Vector2 CalculateSafeMovement(Vector3 obstaclePosition, Vector3 playerPosition)
     {
-       
+
         Vector2 obstacleDir = obstaclePosition - playerPosition;
         var move = new Vector2(obstacleDir.y, -obstacleDir.x).normalized;
-       
+
         return move;
     }
     bool SameLine(Collider2D target, Vector2 dir, Vector3 bot)
@@ -128,7 +121,7 @@ public class TiyaniBotScript : IBotScript
         }
         else
         {
-           return false;
+            return false;
         }
     }
 }

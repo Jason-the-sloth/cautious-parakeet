@@ -1,17 +1,28 @@
+using System;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using Helpers;
+using Services;
+using Unity.Serialization.Json;
 using UnityEngine;
 
-public class HumanPlayer : IBotScript
+public class RecordingHumanPlayer : IBotScript
 {
+    private ControlService controlService;
+    public RecordingHumanPlayer()
+    {
+        controlService = new ControlService();
+    }
 
     public BotCommands GetCommands(BotInput botinput)
     {
         BotCommands botCommands = new(new(Move()), Rotate(), Shoot());
-
+        controlService.Capture(botinput, botCommands);
         return botCommands;
     }
 
-    Vector2 Move()
+    private Vector2 Move()
     {
         // Initialize movement direction
         Vector2 moveDirection = Vector2.zero;
@@ -37,7 +48,7 @@ public class HumanPlayer : IBotScript
         return moveDirection;
     }
 
-    float Rotate()
+    private float Rotate()
     {
         float rotate = 0f;
 
@@ -53,7 +64,7 @@ public class HumanPlayer : IBotScript
         return rotate;
     }
 
-    bool Shoot()
+    private bool Shoot()
     {
         return Input.GetKey(KeyCode.Space);
     }

@@ -282,10 +282,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1365801135860132522}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13e723a1525a36a478b339f65e78f901, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bacaa710d822034eb72d17c3b35919d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalVariables: {fileID: 0}
+  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
   health: 0
 --- !u!1 &2903982994774708429
 GameObject:

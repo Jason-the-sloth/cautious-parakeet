@@ -1,130 +1,83 @@
+using Helpers;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
+using System.Linq;
+using Unity.Serialization.Json;
 using UnityEngine;
 
 public class BasicBotScript : IBotScript
 {
-	private GameObject me = null;
-	
-	public BasicBotScript() { }
+    public BasicBotScript() { }
 
-	public BotCommands GetCommands(string botinput)
+    public BotCommands GetCommands(BotInput botInput)
     {
-        var colliders = new List<Collider2D>();
-
-        Dictionary<String, List<Collider2D>> colliderMap = new();
-
-		if (me == null)
-		{
-			WhoAmI(colliders);
-		}
-
-		foreach (var collider in colliders)
-		{
-			var gameObject = collider.gameObject;
-			var tag = gameObject.tag;
-			if (gameObject == me)
-				continue;
-
-			if (!colliderMap.ContainsKey(tag))
-			{
-				colliderMap[tag] = new List<Collider2D>();
-			}
-
-			colliderMap[tag].Add(collider);
-		}
-
-		BotCommands botCommands = new();
-
-		//if found the enemy player shoot at and try to maintain distance
-		if (colliderMap.ContainsKey("player"))
-		{
-			botCommands = FoundEnemy(colliderMap["player"][0]);
-
-		}
-		//else search
-		else
-		{
-			List<Collider2D> borders = colliderMap.GetValueOrDefault("border", null);
-
-			botCommands = SearchForEnemy(borders);
-		}
-
-		return botCommands;
-	}
-
-    private BotCommands SearchForEnemy(List<Collider2D> borders)
-    {
-		BotCommands botCommands;
-		if(borders != null && borders.Count > 0)
-		{
-			Vector2 pos = me.transform.position;
-			float rotate= 0f;
-
-			float angle = Vector2.SignedAngle(Vector2.zero - pos, me.transform.up);
-
-			if (angle < -20.0F)
-			{
-				rotate = 1f;
-			}
-			else if (angle > 20.0F)
-			{
-				rotate = -1f;
-			}
-			botCommands = new(Vector2.up, rotate, false);
-		}
-		else
-		{
-			//fly straight
-			botCommands = new(Vector2.up, 0f, false);
-		}
-		return botCommands;
+        //if found the enemy player shoot at and try to maintain distance
+        if (botInput?.OtherPlayers.FirstOrDefault() != null)
+        {
+            return FoundEnemy(botInput.Player,botInput.OtherPlayers.First());
+        }
+        
+        return SearchForEnemy(botInput.Player,botInput.Borders);
     }
 
-    private BotCommands FoundEnemy(Collider2D firstPlayer)
-	{
-		Vector2 move = Vector2.zero;
-		float rotate = 0f;
-		bool shoot = false;
+    private BotCommands SearchForEnemy(Player me, List<Border> borders)
+    {
+        BotCommands botCommands;
+        if (borders != null && borders.Count > 0)
+        {
+            Vector2 pos = me.Position.ToVector2();
+            float rotate = 0f;
 
-		float angle = Vector2.SignedAngle(firstPlayer.transform.position - me.transform.position, me.transform.up);
+            float angle = Vector2.SignedAngle(Vector2.zero - pos, Vector2.up);
 
-		if (angle < -5.0F)
-		{
-			rotate = 1f;
-		}
-		else if (angle > 5.0F)
-		{
-			rotate = -1f;
-		}
-		else
-		{
-			shoot = true;
-		}
+            if (angle < -20.0F)
+            {
+                rotate = 1f;
+            }
+            else if (angle > 20.0F)
+            {
+                rotate = -1f;
+            }
+            botCommands = new(SimpleVector.Up, rotate, false);
+        }
+        else
+        {
+            //fly straight
+            botCommands = new(SimpleVector.Up, 0f, false);
+        }
+        return botCommands;
+    }
 
-		float distance = Vector2.Distance(firstPlayer.transform.position, me.transform.position);
-		if (distance > 4)
-		{
-			move = Vector2.up;
-		}
-		else if (distance < 2)
-		{
-			move = Vector2.down;
-		}
-		return new BotCommands(move, rotate, shoot);
-	}
+    private BotCommands FoundEnemy(Player me, Player firstPlayer)
+    {
+        Vector2 move = Vector2.zero;
+        float rotate = 0f;
+        bool shoot = false;
 
-	private void WhoAmI(List<Collider2D> colliders)
-	{
+        float angle = Vector2.SignedAngle(firstPlayer.Position.ToVector2() - me.Position.ToVector2(), Vector2.up);
 
-		foreach (Collider2D collider in colliders)
-		{
-			if (collider.gameObject.CompareTag("player"))
-			{
-				me = collider.gameObject;
-			}
-		}
-		Debug.Log("I am " + me.name);
-	}
+        if (angle < -5.0F)
+        {
+            rotate = 1f;
+        }
+        else if (angle > 5.0F)
+        {
+            rotate = -1f;
+        }
+        else
+        {
+            shoot = true;
+        }
+
+        float distance = Vector2.Distance(firstPlayer.Position.ToVector2(), me.Position.ToVector2());
+        if (distance > 4)
+        {
+            move = Vector2.up;
+        }
+        else if (distance < 2)
+        {
+            move = Vector2.down;
+        }
+        return new BotCommands(new(move), rotate, shoot);
+    }
 }
