@@ -307,12 +307,15 @@ public class BotScript : MonoBehaviour
     }
     BotInput.Border MapColliderToBorder(Collider2D collider)
     {
-        BotInput.Border border = new BotInput.Border();
-        border.position = collider.transform.position;
-        border.width = collider.GetComponent<Renderer>().bounds.size.x;
-        border.height = collider.GetComponent<Renderer>().bounds.size.y;
-
-        return border;
+        return new()
+        {
+            Position = new(gameObject.transform.position),
+            Rotation = gameObject.transform.rotation.z,
+            Velocity = new(gameObject.GetComponent<Rigidbody2D>().velocity),
+            Color = gameObject.GetComponent<Renderer>().material.color.ToHexString(),
+            Health = health,
+            Score = botStats.GetComponent<BotStatsScript>().score
+        };
     }
     BotInput.Bullet MapColliderToBullet(Collider2D collider)
     {
