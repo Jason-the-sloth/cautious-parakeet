@@ -286,7 +286,9 @@ public class BotScript : MonoBehaviour
             Position = new(gameObject.transform.position),
             Rotation = gameObject.transform.rotation.z,
             Velocity = new(gameObject.GetComponent<Rigidbody2D>().velocity),
-            Color = gameObject.GetComponent<Renderer>().material.color.ToHexString()
+            Color = gameObject.GetComponent<Renderer>().material.color.ToHexString(),
+            Health = health,
+            Score = botStats.GetComponent<BotStatsScript>().score
         };
     }
 
@@ -302,14 +304,12 @@ public class BotScript : MonoBehaviour
 
     private Bullet MapColliderToBullet(Collider2D collider)
     {
-        return new()
+        return new ()
         {
-            Position = new(gameObject.transform.position),
-            Rotation = gameObject.transform.rotation.z,
-            Velocity = new(gameObject.GetComponent<Rigidbody2D>().velocity),
-            Color = gameObject.GetComponent<Renderer>().material.color.ToHexString(),
-            Health = health,
-            Score = botStats.GetComponent<BotStatsScript>().score
+            Position = new(collider.transform.position),
+            Velocity = new(collider.GetComponent <Rigidbody2D>().velocity),
+            Force = new(collider.GetComponent<Rigidbody2D>().totalForce),
+            FiredBy = MapColliderToPlayer(collider.GetComponent<BulletScript>().shotOwner)
         };
     }
 
