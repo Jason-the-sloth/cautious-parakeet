@@ -129,10 +129,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 97124523845808656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 198f43d5d90a4014b926e422ce893487, type: 3}
+  m_Script: {fileID: 11500000, guid: 2f8a0b0dc1e858e4f87934549b60d2fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  globalVariables: {fileID: 11400000, guid: 263a38b65a4102a4aa9536620df08aba, type: 2}
+  globalVariables: {fileID: 0}
   health: 0
   score: 0
   hits: 0
