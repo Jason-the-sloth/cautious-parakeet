@@ -18,6 +18,7 @@ namespace Control
 
             builder.Services.AddScoped<IBotService, BotService>();
             builder.Services.AddScoped<ICaptureService, CaptureService>();
+            builder.Services.AddScoped<IAIBotService, AIBotService>();
 
             var app = builder.Build();
 
